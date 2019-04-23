@@ -225,10 +225,9 @@ CaptureUnicodeString(
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-
     if (SourceString->Length == 0) {
-        DestString->Length = 0;
         DestString->Buffer = NULL;
+        DestString->Length = 0;
         DestString->MaximumLength = 0;
 
         return ntStatus;
@@ -258,7 +257,6 @@ CaptureUnicodeString(
                        "[Milou] Failed capturing unicode buffer, exception %#X\n",
                        ntStatus);
         }
-
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,

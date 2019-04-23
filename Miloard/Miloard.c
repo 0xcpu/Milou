@@ -159,9 +159,9 @@ StopDriver(
 _Success_(return == TRUE)
 BOOLEAN
 MiloardManageDriver(
-    _In_	LPCTSTR		DriverPath,
-	_In_	LPCTSTR		ServiceName,
-	_In_	SIZE_T		Action
+    _In_    LPCTSTR		DriverPath,
+    _In_    LPCTSTR		ServiceName,
+    _In_    SIZE_T		Action
 )
 {
 	SC_HANDLE	schSCManager;
