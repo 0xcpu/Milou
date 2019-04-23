@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<instrumentationManifest xsi:schemaLocation="http://schemas.microsoft.com/win/2004/08/events eventman.xsd" xmlns="http://schemas.microsoft.com/win/2004/08/events" xmlns:win="http://manifests.microsoft.com/win/2004/08/windows/events" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:trace="http://schemas.microsoft.com/win/2004/08/events/trace">
+	<instrumentation>
+		<events>
+			<provider name="Milou Driver" guid="{20D8760D-4D46-46CE-98AE-0E44BA6C1F6A}" symbol="MilouGuid" resourceFileName="%SystemDrive%\Milou\Milou.sys" messageFileName="%SystemDrive%\Milou\Milou.sys">
+				<events>
+					<event symbol="MilouEvent" value="31337" version="1" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLog" message="$(string.MilouEvent.EventMessage)"></event>
+					<event symbol="MilouRegPreDeleteKeyEvent" value="31338" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreDeleteKey" message="$(string.Milou Driver.event.31338.message)"></event>
+					<event symbol="MilouRegPreSetValueKeyBinEvent" value="31339" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetValueKeyBin" message="$(string.Milou Driver.event.31339.message)"></event>
+					<event symbol="MilouRegPreSetValueKeyDwordEvent" value="31339" version="1" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetValueKeyDword" message="$(string.Milou Driver.event.31339.message)"></event>
+					<event symbol="MilouRegPreSetValueKeyUcStrEvent" value="31339" version="2" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetValueKeyUcStr" message="$(string.Milou Driver.event.31339.message)"></event>
+					<event symbol="MilouRegPreSetValueKeyQwordEvent" value="31339" version="3" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetValueKeyQword" message="$(string.Milou Driver.event.31339.message)"></event>
+				</events>
+				<levels></levels>
+				<tasks></tasks>
+				<opcodes></opcodes>
+				<channels>
+					<channel name="Milou" chid="Milou" symbol="Milou" type="Analytic" enabled="true" message="$(string.Milou Driver.channel.Milou.message)"></channel>
+				</channels>
+				<templates>
+					<template tid="MilouLog">
+						<data name="MilouLogMessage" inType="win:UnicodeString" outType="xs:string"></data>
+					</template>
+					<template tid="MilouLogRegPreDeleteKey">
+						<data name="Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+					</template>
+					<template tid="MilouLogRegPreSetValueKeyBin">
+						<data name="Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Value" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Data" inType="win:Binary" outType="xs:hexBinary" length="32"></data>
+						<data name="Type" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+					</template>
+					<template tid="MilouLogRegPreSetValueKeyDword">
+						<data name="Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Value" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Data" inType="win:UInt32" outType="xs:unsignedInt"></data>
+						<data name="Type" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+					</template>
+					<template tid="MilouLogRegPreSetValueKeyUcStr">
+						<data name="Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Value" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Data" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Type" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+					</template>
+					<template tid="MilouLogRegPreSetValueKey">
+						<data name="Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Value" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Data" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Type" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+					</template>
+					<template tid="MilouLogRegPreSetValueKeyQword">
+						<data name="Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Value" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Data" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Type" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+					</template>
+				</templates>
+			</provider>
+		</events>
+	</instrumentation>
+	<localization>
+		<resources culture="en-US">
+			<stringTable>
+				<string id="task.None" value="None"></string>
+				<string id="opcode.Info" value="Info"></string>
+				<string id="level.Informational" value="Information"></string>
+				<string id="channel.System" value="System"></string>
+				<string id="channel.Application" value="Application"></string>
+				<string id="MilouEvent.EventMessage" value="Milou Message"></string>
+				<string id="Milou Driver.event.31339.message" value="Milou Registry Callback Set Value"></string>
+				<string id="Milou Driver.event.31338.message" value="Milou Registry Callback Delete Key"></string>
+				<string id="Milou Driver.channel.Milou.message" value="Milou Driver ETW"></string>
+				<string id="Milou Driver.Keyword.reg.message" value="Registry callback"></string>
+				<string id="Milou Driver.Keyword.Milou_registry.message" value="Milou registry callback"></string>
+			</stringTable>
+		</resources>
+	</localization>
+</instrumentationManifest>
