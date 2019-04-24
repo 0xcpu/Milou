@@ -547,7 +547,7 @@ Remarks:
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Provider "Milou Driver" event count 7
+// Provider "Milou Driver" event count 9
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // Provider GUID = 20d8760d-4d46-46ce-98ae-0e44ba6c1f6a
@@ -579,6 +579,10 @@ EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetValueKeyQwor
 #define MilouRegPreSetValueKeyQwordEvent_value 0x7a6b
 EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreDeleteValueKeyEvent = {0x7a6c, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
 #define MilouRegPreDeleteValueKeyEvent_value 0x7a6c
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetInformationKeyQwordEvent = {0x7a6d, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define MilouRegPreSetInformationKeyQwordEvent_value 0x7a6d
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetInformationKeyUcStrEvent = {0x7a6d, 0x1, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define MilouRegPreSetInformationKeyUcStrEvent_value 0x7a6d
 
 //
 // MCGEN_DISABLE_PROVIDER_CODE_GENERATION macro:
@@ -741,6 +745,34 @@ EXTERN_C __declspec(selectany) MCGEN_TRACE_CONTEXT MilouGuid_Context = {0, (ULON
 #define EventWriteMilouRegPreDeleteValueKeyEvent_AssumeEnabled(Key, Value, Pid, Tid) \
         McTemplateK0zzxx(&MilouGuid_Context, &MilouRegPreDeleteValueKeyEvent, NULL, Key, Value, Pid, Tid)
 
+//
+// Enablement check macro for MilouRegPreSetInformationKeyQwordEvent
+//
+#define EventEnabledMilouRegPreSetInformationKeyQwordEvent() MCGEN_EVENT_BIT_SET(Milou_DriverEnableBits, 0)
+
+//
+// Event write macros for MilouRegPreSetInformationKeyQwordEvent
+//
+#define EventWriteMilouRegPreSetInformationKeyQwordEvent(Activity, Key, Value, Type, Pid, Tid) \
+        MCGEN_EVENT_ENABLED(MilouRegPreSetInformationKeyQwordEvent) \
+        ? McTemplateK0zxxxx(&MilouGuid_Context, &MilouRegPreSetInformationKeyQwordEvent, Activity, Key, Value, Type, Pid, Tid) : 0
+#define EventWriteMilouRegPreSetInformationKeyQwordEvent_AssumeEnabled(Key, Value, Type, Pid, Tid) \
+        McTemplateK0zxxxx(&MilouGuid_Context, &MilouRegPreSetInformationKeyQwordEvent, NULL, Key, Value, Type, Pid, Tid)
+
+//
+// Enablement check macro for MilouRegPreSetInformationKeyUcStrEvent
+//
+#define EventEnabledMilouRegPreSetInformationKeyUcStrEvent() MCGEN_EVENT_BIT_SET(Milou_DriverEnableBits, 0)
+
+//
+// Event write macros for MilouRegPreSetInformationKeyUcStrEvent
+//
+#define EventWriteMilouRegPreSetInformationKeyUcStrEvent(Activity, Key, Value, Type, Pid, Tid) \
+        MCGEN_EVENT_ENABLED(MilouRegPreSetInformationKeyUcStrEvent) \
+        ? McTemplateK0zzxxx(&MilouGuid_Context, &MilouRegPreSetInformationKeyUcStrEvent, Activity, Key, Value, Type, Pid, Tid) : 0
+#define EventWriteMilouRegPreSetInformationKeyUcStrEvent_AssumeEnabled(Key, Value, Type, Pid, Tid) \
+        McTemplateK0zzxxx(&MilouGuid_Context, &MilouRegPreSetInformationKeyUcStrEvent, NULL, Key, Value, Type, Pid, Tid)
+
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 //
@@ -810,6 +842,44 @@ McTemplateK0zxx(
     return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0zxx_ARGCOUNT + 1, EventData);
 }
 #endif // McTemplateK0zxx_def
+
+//
+//Template from manifest : MilouLogRegPreSetInformationQwordKey
+//
+#ifndef McTemplateK0zxxxx_def
+#define McTemplateK0zxxxx_def
+ETW_INLINE
+ULONG
+McTemplateK0zxxxx(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_opt_ const GUID* Activity,
+    _In_opt_ PCWSTR  _Arg0,
+    _In_ const unsigned __int64  _Arg1,
+    _In_ const unsigned __int64  _Arg2,
+    _In_ const unsigned __int64  _Arg3,
+    _In_ const unsigned __int64  _Arg4
+    )
+{
+#define McTemplateK0zxxxx_ARGCOUNT 5
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0zxxxx_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],
+                        (_Arg0 != NULL) ? _Arg0 : L"NULL",
+                        (_Arg0 != NULL) ? (ULONG)((wcslen(_Arg0) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
+
+    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0zxxxx_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateK0zxxxx_def
 
 //
 //Template from manifest : MilouLogRegPreSetValueKeyBin
@@ -935,6 +1005,46 @@ McTemplateK0zzxx(
 #endif // McTemplateK0zzxx_def
 
 //
+//Template from manifest : MilouLogRegPreSetInformationUcStrKey
+//
+#ifndef McTemplateK0zzxxx_def
+#define McTemplateK0zzxxx_def
+ETW_INLINE
+ULONG
+McTemplateK0zzxxx(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_opt_ const GUID* Activity,
+    _In_opt_ PCWSTR  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const unsigned __int64  _Arg2,
+    _In_ const unsigned __int64  _Arg3,
+    _In_ const unsigned __int64  _Arg4
+    )
+{
+#define McTemplateK0zzxxx_ARGCOUNT 5
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0zzxxx_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],
+                        (_Arg0 != NULL) ? _Arg0 : L"NULL",
+                        (_Arg0 != NULL) ? (ULONG)((wcslen(_Arg0) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
+
+    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0zzxxx_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateK0zzxxx_def
+
+//
 //Template from manifest : MilouLogRegPreSetValueKeyQword
 //
 #ifndef McTemplateK0zzxxxx_def
@@ -1035,4 +1145,5 @@ McTemplateK0zzzxxx(
 #define MSG_Milou_Driver_event_31338_message 0xB0007A6AL
 #define MSG_Milou_Driver_event_31339_message 0xB0007A6BL
 #define MSG_Milou_Driver_event_31340_message 0xB0007A6CL
+#define MSG_Milou_Driver_event_31341_message 0xB0007A6DL
 #define MSG_MilouEvent_EventMessage          0xB0017A69L

@@ -44,6 +44,7 @@ MilouRegNtPreDeleteKey(
                                                 (SIZE_T)PsGetCurrentThreadId());
 
             ExFreePoolWithTag(pwKeyName, MILOU_REG_CB_TAG);
+            pwKeyName = NULL;
         }
 
         CmCallbackReleaseKeyObjectIDEx(ObjectName);
@@ -106,7 +107,6 @@ MilouRegNtPreSetValueKey(
                 RtlCopyMemory(pwKeyName, ObjectName->Buffer, ObjectName->Length);
                 RtlSecureZeroMemory(pwValueName, pRegSetValueInfo->ValueName->Length + sizeof(WCHAR));
                 RtlCopyMemory(pwValueName, pRegSetValueInfo->ValueName->Buffer, pRegSetValueInfo->ValueName->Length);
-
                 //
                 // To understand why we need to capture the buffer, read remarks sections:
                 // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/content/wdm/nc-wdm-ex_callback_function
@@ -145,6 +145,7 @@ MilouRegNtPreSetValueKey(
                                                                  pRegSetValueInfo->Type,
                                                                  (SIZE_T)PsGetCurrentProcessId(),
                                                                  (SIZE_T)PsGetCurrentThreadId());
+
                         break;
                     case REG_DWORD_BIG_ENDIAN:
                     case REG_DWORD_LITTLE_ENDIAN:
@@ -155,6 +156,7 @@ MilouRegNtPreSetValueKey(
                                                                    pRegSetValueInfo->Type,
                                                                    (SIZE_T)PsGetCurrentProcessId(),
                                                                    (SIZE_T)PsGetCurrentThreadId());
+
                         break;
                     case REG_QWORD:
                         EventWriteMilouRegPreSetValueKeyQwordEvent(NULL,
@@ -164,6 +166,8 @@ MilouRegNtPreSetValueKey(
                                                                    pRegSetValueInfo->Type,
                                                                    (SIZE_T)PsGetCurrentProcessId(),
                                                                    (SIZE_T)PsGetCurrentThreadId());
+
+                        break;
                     case REG_SZ:
                     case REG_EXPAND_SZ:
                         EventWriteMilouRegPreSetValueKeyUcStrEvent(NULL,
@@ -173,6 +177,7 @@ MilouRegNtPreSetValueKey(
                                                                    pRegSetValueInfo->Type,
                                                                    (SIZE_T)PsGetCurrentProcessId(),
                                                                    (SIZE_T)PsGetCurrentThreadId());
+
                         break;
                     default:
                         EventWriteMilouRegPreSetValueKeyUcStrEvent(NULL,
@@ -182,6 +187,7 @@ MilouRegNtPreSetValueKey(
                                                                    pRegSetValueInfo->Type,
                                                                    (SIZE_T)PsGetCurrentProcessId(),
                                                                    (SIZE_T)PsGetCurrentThreadId());
+
                         break;
                     }
                 }
@@ -274,6 +280,7 @@ MilouRegNtPreDeleteValueKey(
             }
 
             ExFreePoolWithTag(pwKeyName, MILOU_REG_CB_TAG);
+            pwKeyName = NULL;
         }
 
         CmCallbackReleaseKeyObjectIDEx(ObjectName);
@@ -281,6 +288,105 @@ MilouRegNtPreDeleteValueKey(
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
                    "[Milou][RegNtPreDeleteValueKey] Failed obtaining key name\n");
+
+        retStatus = FALSE;
+    }
+
+    return retStatus;
+}
+
+_Success_(return == TRUE)
+BOOLEAN
+MilouRegNtPreSetInformationKey(
+    _In_    PVOID   CallbackContext,
+    _In_    PVOID   Argument2
+)
+{
+    NTSTATUS                                ntStatus;
+    BOOLEAN                                 retStatus = TRUE;
+    PWSTR                                   pwKeyName = NULL;
+    PVOID                                   pRegData = NULL;
+    ULONG_PTR                               ObjectId = 0;
+    PCUNICODE_STRING                        ObjectName = NULL;
+    PREG_SET_INFORMATION_KEY_INFORMATION    pRegSetInfo = NULL;
+    PMILOU_CALLBACK_CONTEXT                 pMilouCallbackCtx = NULL;
+
+    PAGED_CODE();
+
+    pMilouCallbackCtx = (PMILOU_CALLBACK_CONTEXT)CallbackContext;
+    pRegSetInfo = (PREG_SET_INFORMATION_KEY_INFORMATION)Argument2;
+
+    if (NT_SUCCESS(CmCallbackGetKeyObjectIDEx(&pMilouCallbackCtx->Cookie,
+                                              pRegSetInfo->Object,
+                                              &ObjectId,
+                                              &ObjectName,
+                                              0))) {
+        pwKeyName = (PWSTR)ExAllocatePoolWithTag(PagedPool, ObjectName->Length + sizeof(WCHAR), MILOU_REG_CB_TAG);
+        if (NULL == pwKeyName) {
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_ERROR_LEVEL,
+                       "[Milou][RegNtPreSetInformationKey] Failed to allocate memory\n");
+
+            retStatus = FALSE;
+        } else {
+            RtlSecureZeroMemory(pwKeyName, ObjectName->Length + sizeof(WCHAR));
+            RtlCopyMemory(pwKeyName, ObjectName->Buffer, ObjectName->Length);
+
+            switch (pRegSetInfo->KeySetInformationClass) {
+            case KeyWriteTimeInformation:
+                if (!g_IsWindows8OrGreater && (ExGetPreviousMode() == UserMode)) {
+                    ntStatus = CaptureBuffer(&pRegData,
+                                             pRegSetInfo->KeySetInformation,
+                                             pRegSetInfo->KeySetInformationLength,
+                                             MILOU_REG_CB_TAG);
+                    if (NT_SUCCESS(ntStatus) && (pRegData != NULL)) {
+                        EventWriteMilouRegPreSetInformationKeyQwordEvent(NULL,
+                                                                         pwKeyName,
+                                                                         ((PKEY_WRITE_TIME_INFORMATION)pRegData)->LastWriteTime.QuadPart,
+                                                                         pRegSetInfo->KeySetInformationClass,
+                                                                         (SIZE_T)PsGetCurrentProcessId(),
+                                                                         (SIZE_T)PsGetCurrentThreadId());
+
+                        FreeCapturedBuffer(pRegData, MILOU_REG_CB_TAG);
+                        pRegData = NULL;
+                    } else {
+                        EventWriteMilouRegPreSetInformationKeyUcStrEvent(NULL,
+                                                                         pwKeyName,
+                                                                         L"Failed to capture data buffer",
+                                                                         pRegSetInfo->KeySetInformationClass,
+                                                                         (SIZE_T)PsGetCurrentProcessId(),
+                                                                         (SIZE_T)PsGetCurrentThreadId());
+                    }
+                } else {
+                    EventWriteMilouRegPreSetInformationKeyQwordEvent(NULL,
+                                                                     pwKeyName,
+                                                                     ((PKEY_WRITE_TIME_INFORMATION)pRegSetInfo->KeySetInformation)->LastWriteTime.QuadPart,
+                                                                     pRegSetInfo->KeySetInformationClass,
+                                                                     (SIZE_T)PsGetCurrentProcessId(),
+                                                                     (SIZE_T)PsGetCurrentThreadId());
+                }
+
+                break;
+            default:
+                EventWriteMilouRegPreSetInformationKeyUcStrEvent(NULL,
+                                                                 pwKeyName,
+                                                                 L"Reserved for system use",
+                                                                 pRegSetInfo->KeySetInformationClass,
+                                                                 (SIZE_T)PsGetCurrentProcessId(),
+                                                                 (SIZE_T)PsGetCurrentThreadId());
+
+                break;
+            }
+
+            ExFreePoolWithTag(pwKeyName, MILOU_REG_CB_TAG);
+            pwKeyName = NULL;
+        }
+
+        CmCallbackReleaseKeyObjectIDEx(ObjectName);
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   "[Milou][RegNtPreSetInformationKey] Failed obtaining key name\n");
 
         retStatus = FALSE;
     }
@@ -315,6 +421,12 @@ MilouRegistryCallback(
     case RegNtPreDeleteValueKey:
         if (!MilouRegNtPreDeleteValueKey(CallbackContext, Argument2)) {
             EventWriteMilouEvent(NULL, L"[Milou-error] RegNtPreDeleteValueKey");
+        }
+
+        break;
+    case RegNtPreSetInformationKey:
+        if (!MilouRegNtPreSetInformationKey(CallbackContext, Argument2)) {
+            EventWriteMilouEvent(NULL, L"[Milou-error] RegNtPreSetInformationKey");
         }
 
         break;
