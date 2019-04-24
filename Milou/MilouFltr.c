@@ -394,6 +394,105 @@ MilouRegNtPreSetInformationKey(
     return retStatus;
 }
 
+_Success_(return == TRUE)
+BOOLEAN
+MilouRegNtPreRenameKey(
+    _In_    PVOID   CallbackContext,
+    _In_    PVOID   Argument2
+)
+{
+    BOOLEAN                     retStatus = TRUE;
+    NTSTATUS                    ntStatus;
+    PWSTR                       pwKeyName = NULL;
+    PWSTR                       pwNewKeyName = NULL;
+    ULONG_PTR                   ObjectId = 0;
+    UNICODE_STRING              ValueName;
+    PCUNICODE_STRING            ObjectName = NULL;
+    PREG_RENAME_KEY_INFORMATION pRegRenameKeyInfo = NULL;
+    PMILOU_CALLBACK_CONTEXT     pMilouCallbackCtx = NULL;
+
+    PAGED_CODE();
+
+    RtlInitEmptyUnicodeString(&ValueName, NULL, 0);
+    pMilouCallbackCtx = (PMILOU_CALLBACK_CONTEXT)CallbackContext;
+    pRegRenameKeyInfo = (PREG_RENAME_KEY_INFORMATION)Argument2;
+    if (NT_SUCCESS(CmCallbackGetKeyObjectIDEx(&pMilouCallbackCtx->Cookie,
+                                              pRegRenameKeyInfo->Object,
+                                              &ObjectId,
+                                              &ObjectName,
+                                              0))) {
+        pwKeyName = (PWSTR)ExAllocatePoolWithTag(PagedPool, ObjectName->Length + sizeof(WCHAR), MILOU_REG_CB_TAG);
+        if (NULL == pwKeyName) {
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_ERROR_LEVEL,
+                       "[Milou][RegNtPreRenameKey] Failed to allocate memory\n");
+
+            retStatus = FALSE;
+        } else {
+            RtlSecureZeroMemory(pwKeyName, ObjectName->Length + sizeof(WCHAR));
+            RtlCopyMemory(pwKeyName, ObjectName->Buffer, ObjectName->Length);
+
+            if (!g_IsWindows8OrGreater && (ExGetPreviousMode() == UserMode)) {
+                ntStatus = CaptureUnicodeString(&ValueName, pRegRenameKeyInfo->NewName, MILOU_REG_CB_TAG);
+                if (NT_SUCCESS(ntStatus) && (ValueName.Buffer != NULL)) {
+                    EventWriteMilouRegPreRenameKeyEvent(NULL,
+                                                        pwKeyName,
+                                                        ValueName.Buffer,
+                                                        (SIZE_T)PsGetCurrentProcessId(),
+                                                        (SIZE_T)PsGetCurrentThreadId());
+
+                    FreeCapturedUnicodeString(&ValueName, MILOU_REG_CB_TAG);
+                    ValueName.Buffer = NULL;
+                } else {
+                    EventWriteMilouRegPreRenameKeyEvent(NULL,
+                                                        pwKeyName,
+                                                        L"Failed to capture data buffer",
+                                                        (SIZE_T)PsGetCurrentProcessId(),
+                                                        (SIZE_T)PsGetCurrentThreadId());
+                }
+            } else {
+                //
+                // we need to add end character to unicode string otherwise formatting in log we'll be messed up
+                // if we failed to add end char, log an error message, but the previous key will still be in the log.
+                //
+                pwNewKeyName = (PWSTR)ExAllocatePoolWithTag(PagedPool, pRegRenameKeyInfo->NewName->Length + sizeof(WCHAR), MILOU_REG_CB_TAG);
+                if (pwNewKeyName != NULL) {
+                    RtlSecureZeroMemory(pwNewKeyName, pRegRenameKeyInfo->NewName->Length + sizeof(WCHAR));
+                    RtlCopyMemory(pwNewKeyName, pRegRenameKeyInfo->NewName->Buffer, pRegRenameKeyInfo->NewName->Length);
+
+                    EventWriteMilouRegPreRenameKeyEvent(NULL,
+                                                        pwKeyName,
+                                                        pwNewKeyName,
+                                                        (SIZE_T)PsGetCurrentProcessId(),
+                                                        (SIZE_T)PsGetCurrentThreadId());
+
+                    ExFreePoolWithTag(pwNewKeyName, MILOU_REG_CB_TAG);
+                    pwNewKeyName = NULL;
+                } else {
+                    EventWriteMilouRegPreRenameKeyEvent(NULL,
+                                                        pwKeyName,
+                                                        L"Failed to allocate memory",
+                                                        (SIZE_T)PsGetCurrentProcessId(),
+                                                        (SIZE_T)PsGetCurrentThreadId());
+                }
+            }
+
+            ExFreePoolWithTag(pwKeyName, MILOU_REG_CB_TAG);
+            pwKeyName = NULL;
+        }
+
+        CmCallbackReleaseKeyObjectIDEx(ObjectName);
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   "[Milou][RegNtPreRenameKey] Failed obtaining key name\n");
+
+        retStatus = FALSE;
+    }
+
+    return retStatus;
+}
+
 _Use_decl_annotations_
 NTSTATUS
 MilouRegistryCallback(
@@ -427,6 +526,12 @@ MilouRegistryCallback(
     case RegNtPreSetInformationKey:
         if (!MilouRegNtPreSetInformationKey(CallbackContext, Argument2)) {
             EventWriteMilouEvent(NULL, L"[Milou-error] RegNtPreSetInformationKey");
+        }
+
+        break;
+    case RegNtPreRenameKey:
+        if (!MilouRegNtPreRenameKey(CallbackContext, Argument2)) {
+            EventWriteMilouEvent(NULL, L"[Milou-error] RegNtPreRenameKey");
         }
 
         break;

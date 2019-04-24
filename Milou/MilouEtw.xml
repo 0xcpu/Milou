@@ -13,6 +13,7 @@
 					<event symbol="MilouRegPreDeleteValueKeyEvent" value="31340" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreDeleteValueKey" message="$(string.Milou Driver.event.31340.message)"></event>
 					<event symbol="MilouRegPreSetInformationKeyQwordEvent" value="31341" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetInformationQwordKey" message="$(string.Milou Driver.event.31341.message)"></event>
 					<event symbol="MilouRegPreSetInformationKeyUcStrEvent" value="31341" version="1" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetInformationUcStrKey" message="$(string.Milou Driver.event.31341.message)"></event>
+					<event symbol="MilouRegPreRenameKeyEvent" value="31342" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreRenameKey" message="$(string.Milou Driver.event.31342.message)"></event>
 				</events>
 				<levels></levels>
 				<tasks></tasks>
@@ -81,6 +82,12 @@
 						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
 						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
 					</template>
+					<template tid="MilouLogRegPreRenameKey">
+						<data name="Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="New Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+					</template>
 				</templates>
 			</provider>
 		</events>
@@ -94,6 +101,7 @@
 				<string id="channel.System" value="System"></string>
 				<string id="channel.Application" value="Application"></string>
 				<string id="MilouEvent.EventMessage" value="Milou Message"></string>
+				<string id="Milou Driver.event.31342.message" value="Milou Registry Callback Rename Key"></string>
 				<string id="Milou Driver.event.31341.message" value="Milou Registry Callback Set Information"></string>
 				<string id="Milou Driver.event.31340.message" value="Milou Registry Callback Delete Value"></string>
 				<string id="Milou Driver.event.31339.message" value="Milou Registry Callback Set Value"></string>
