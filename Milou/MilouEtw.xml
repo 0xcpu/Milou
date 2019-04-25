@@ -14,6 +14,8 @@
 					<event symbol="MilouRegPreSetInformationKeyQwordEvent" value="31341" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetInformationQwordKey" message="$(string.Milou Driver.event.31341.message)"></event>
 					<event symbol="MilouRegPreSetInformationKeyUcStrEvent" value="31341" version="1" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetInformationUcStrKey" message="$(string.Milou Driver.event.31341.message)"></event>
 					<event symbol="MilouRegPreRenameKeyEvent" value="31342" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreRenameKey" message="$(string.Milou Driver.event.31342.message)"></event>
+					<event symbol="MilouRegPreCreateKeyEvent" value="31343" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreCreateKey" message="$(string.Milou Driver.event.31343.message)"></event>
+					<event symbol="MilouRegPreCreateKeyExEvent" value="31344" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreCreateKeyEx" message="$(string.Milou Driver.event.31344.message)"></event>
 				</events>
 				<levels></levels>
 				<tasks></tasks>
@@ -88,6 +90,17 @@
 						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
 						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
 					</template>
+					<template tid="MilouLogRegPreCreateKey">
+						<data name="Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+					</template>
+					<template tid="MilouLogRegPreCreateKeyEx">
+						<data name="Key" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="RootKey" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+					</template>
 				</templates>
 			</provider>
 		</events>
@@ -101,6 +114,8 @@
 				<string id="channel.System" value="System"></string>
 				<string id="channel.Application" value="Application"></string>
 				<string id="MilouEvent.EventMessage" value="Milou Message"></string>
+				<string id="Milou Driver.event.31344.message" value="Milou Registry Callback Create KeyEx"></string>
+				<string id="Milou Driver.event.31343.message" value="Milou Registry Callback Create Key"></string>
 				<string id="Milou Driver.event.31342.message" value="Milou Registry Callback Rename Key"></string>
 				<string id="Milou Driver.event.31341.message" value="Milou Registry Callback Set Information"></string>
 				<string id="Milou Driver.event.31340.message" value="Milou Registry Callback Delete Value"></string>

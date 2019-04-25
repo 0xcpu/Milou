@@ -547,7 +547,7 @@ Remarks:
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Provider "Milou Driver" event count 10
+// Provider "Milou Driver" event count 12
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // Provider GUID = 20d8760d-4d46-46ce-98ae-0e44ba6c1f6a
@@ -585,6 +585,10 @@ EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetInformationK
 #define MilouRegPreSetInformationKeyUcStrEvent_value 0x7a6d
 EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreRenameKeyEvent = {0x7a6e, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
 #define MilouRegPreRenameKeyEvent_value 0x7a6e
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreCreateKeyEvent = {0x7a6f, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define MilouRegPreCreateKeyEvent_value 0x7a6f
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreCreateKeyExEvent = {0x7a70, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define MilouRegPreCreateKeyExEvent_value 0x7a70
 
 //
 // MCGEN_DISABLE_PROVIDER_CODE_GENERATION macro:
@@ -788,6 +792,34 @@ EXTERN_C __declspec(selectany) MCGEN_TRACE_CONTEXT MilouGuid_Context = {0, (ULON
         ? McTemplateK0zzxx(&MilouGuid_Context, &MilouRegPreRenameKeyEvent, Activity, Key, New_Key, Pid, Tid) : 0
 #define EventWriteMilouRegPreRenameKeyEvent_AssumeEnabled(Key, New_Key, Pid, Tid) \
         McTemplateK0zzxx(&MilouGuid_Context, &MilouRegPreRenameKeyEvent, NULL, Key, New_Key, Pid, Tid)
+
+//
+// Enablement check macro for MilouRegPreCreateKeyEvent
+//
+#define EventEnabledMilouRegPreCreateKeyEvent() MCGEN_EVENT_BIT_SET(Milou_DriverEnableBits, 0)
+
+//
+// Event write macros for MilouRegPreCreateKeyEvent
+//
+#define EventWriteMilouRegPreCreateKeyEvent(Activity, Key, Pid, Tid) \
+        MCGEN_EVENT_ENABLED(MilouRegPreCreateKeyEvent) \
+        ? McTemplateK0zxx(&MilouGuid_Context, &MilouRegPreCreateKeyEvent, Activity, Key, Pid, Tid) : 0
+#define EventWriteMilouRegPreCreateKeyEvent_AssumeEnabled(Key, Pid, Tid) \
+        McTemplateK0zxx(&MilouGuid_Context, &MilouRegPreCreateKeyEvent, NULL, Key, Pid, Tid)
+
+//
+// Enablement check macro for MilouRegPreCreateKeyExEvent
+//
+#define EventEnabledMilouRegPreCreateKeyExEvent() MCGEN_EVENT_BIT_SET(Milou_DriverEnableBits, 0)
+
+//
+// Event write macros for MilouRegPreCreateKeyExEvent
+//
+#define EventWriteMilouRegPreCreateKeyExEvent(Activity, Key, RootKey, Pid, Tid) \
+        MCGEN_EVENT_ENABLED(MilouRegPreCreateKeyExEvent) \
+        ? McTemplateK0zzxx(&MilouGuid_Context, &MilouRegPreCreateKeyExEvent, Activity, Key, RootKey, Pid, Tid) : 0
+#define EventWriteMilouRegPreCreateKeyExEvent_AssumeEnabled(Key, RootKey, Pid, Tid) \
+        McTemplateK0zzxx(&MilouGuid_Context, &MilouRegPreCreateKeyExEvent, NULL, Key, RootKey, Pid, Tid)
 
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
@@ -1163,4 +1195,6 @@ McTemplateK0zzzxxx(
 #define MSG_Milou_Driver_event_31340_message 0xB0007A6CL
 #define MSG_Milou_Driver_event_31341_message 0xB0007A6DL
 #define MSG_Milou_Driver_event_31342_message 0xB0007A6EL
+#define MSG_Milou_Driver_event_31343_message 0xB0007A6FL
+#define MSG_Milou_Driver_event_31344_message 0xB0007A70L
 #define MSG_MilouEvent_EventMessage          0xB0017A69L
