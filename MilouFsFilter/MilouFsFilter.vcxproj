@@ -36,7 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MilouFsFilter.rc" />
-    <ClCompile Include="..\Milou\MilouFsFilter.c" />
+    <ClCompile Include="MilouFsFilter.c" />
     <Inf Include="MilouFsFilter.inf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -181,7 +181,7 @@
     <FilesToPackage Include="$(TargetPath)" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Milou\MilouFsFilter.h" />
+    <ClInclude Include="MilouFsFilter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
