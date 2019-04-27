@@ -14,6 +14,7 @@ extern  FAST_MUTEX  g_CallbackCtxListMutex;
 extern  LIST_ENTRY  g_CallbackCtxListHead;
 extern  SIZE_T      g_CallbackCtxListNumEntries;
 extern  BOOLEAN     g_IsWindows8OrGreater;
+extern  BOOLEAN     g_IsRegistryCallbackActive;
 
 typedef struct _MILOU_CALLBACK_CONTEXT {
     LIST_ENTRY      CallbackCtxList;

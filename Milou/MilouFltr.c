@@ -1,5 +1,11 @@
 #include "MilouFltr.h"
 
+
+// Currently there is no synchronization object used for this flag
+// as the probability that the callback will be registered and unregistered
+// at the same time is minimal?
+BOOLEAN g_IsRegistryCallbackActive;
+
 // Driver callbacks
 EX_CALLBACK_FUNCTION    MilouRegistryCallback;
 
@@ -748,6 +754,8 @@ RegisterRegistryCallback(
             retStatus = FALSE;
 
             goto cleanup;
+        } else {
+            g_IsRegistryCallbackActive = TRUE;
         }
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to register callback: %#X\n", ntStatus);
@@ -763,7 +771,7 @@ RegisterRegistryCallback(
 }
 
 //
-// Currently all registered callbacks will be unregistered by this function
+// Currently all registered registry callbacks will be unregistered by this function
 //
 _Use_decl_annotations_
 BOOLEAN
@@ -775,6 +783,12 @@ UnregisterRegistryCallback(
     PLIST_ENTRY             pListEntry = NULL;
     NTSTATUS                ntStatus;
     BOOLEAN                 retStatus = TRUE;
+
+    if (!g_IsRegistryCallbackActive) {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Registry callback is not active. Nothing to unregister\n");
+
+        return retStatus;
+    }
 
     pListEntry = g_CallbackCtxListHead.Flink;
     while (pListEntry != &g_CallbackCtxListHead) {
@@ -790,6 +804,8 @@ UnregisterRegistryCallback(
             break;
         } else {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Register callback unregistered\n");
+
+            g_IsRegistryCallbackActive = FALSE;
 
             pMilouCallbackCtx = FindAndRemoveCallbackContext(pMilouCallbackCtx->Cookie);
             if (NULL != pMilouCallbackCtx) {
