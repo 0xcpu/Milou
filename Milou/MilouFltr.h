@@ -8,6 +8,7 @@
 
 #define MILOU_CTX_TAG           'xtCM'
 #define MILOU_REG_CB_TAG        'bcRM'
+#define MILOU_PROC_CB_TAG       'bcPM'
 #define MILOU_CAPTURE_BUFF_LEN  32 // in bytes
 
 extern  FAST_MUTEX  g_CallbackCtxListMutex;
@@ -15,6 +16,7 @@ extern  LIST_ENTRY  g_CallbackCtxListHead;
 extern  SIZE_T      g_CallbackCtxListNumEntries;
 extern  BOOLEAN     g_IsWindows8OrGreater;
 extern  BOOLEAN     g_IsRegistryCallbackActive;
+extern  BOOLEAN     g_IsProcessCallbackActive;
 
 typedef struct _MILOU_CALLBACK_CONTEXT {
     LIST_ENTRY      CallbackCtxList;
@@ -32,6 +34,18 @@ RegisterRegistryCallback(
 _Success_(return == TRUE)
 BOOLEAN
 UnregisterRegistryCallback(
+    VOID
+);
+
+_Success_(return == TRUE)
+BOOLEAN
+RegisterProcessCallback(
+    _In_    BOOLEAN Remove
+);
+
+_Success_(return == TRUE)
+BOOLEAN
+UnregisterProcessCallback(
     VOID
 );
 

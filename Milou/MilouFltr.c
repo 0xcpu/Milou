@@ -1,10 +1,11 @@
 #include "MilouFltr.h"
 
 
-// Currently there is no synchronization object used for this flag
+// Currently there is no synchronization object used for this flags
 // as the probability that the callback will be registered and unregistered
 // at the same time is minimal?
 BOOLEAN g_IsRegistryCallbackActive;
+BOOLEAN g_IsProcessCallbackActive;
 
 // Driver callbacks
 EX_CALLBACK_FUNCTION    MilouRegistryCallback;
@@ -822,4 +823,111 @@ UnregisterRegistryCallback(
     }
 
     return retStatus;
+}
+
+VOID
+MilouProcessCallback(
+    PEPROCESS               Process,
+    HANDLE                  ProcessId,
+    PPS_CREATE_NOTIFY_INFO  CreateInfo
+)
+{
+    UNREFERENCED_PARAMETER(Process);
+
+    PWSTR   pImageFileName = NULL;
+    PWSTR   pCommandLine = NULL;
+
+    PAGED_CODE();
+
+    //
+    // Process is exiting, see https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/content/ntddk/nc-ntddk-pcreate_process_notify_routine_ex
+    //
+    if (NULL == CreateInfo) {
+        EventWriteMilouProcExitEvent(NULL, (SIZE_T)ProcessId);
+
+        return;
+    }
+    //
+    // In case allocations fail, and CreateInfo->ImageFileName and/or CreateInfo->CommandLine are
+    // not NULL, the message logged to ETW will not represent the truth, but logging UNICODE_STRING
+    // that probably isn't NULL terminated isn't going to do much better.
+    //
+    if (CreateInfo->ImageFileName != NULL) {
+        pImageFileName = (PWSTR)ExAllocatePoolWithTag(PagedPool, CreateInfo->ImageFileName->Length + sizeof(WCHAR), MILOU_PROC_CB_TAG);
+        if (pImageFileName != NULL) {
+            RtlSecureZeroMemory(pImageFileName, CreateInfo->ImageFileName->Length + sizeof(WCHAR));
+            RtlCopyMemory(pImageFileName, CreateInfo->ImageFileName->Buffer, CreateInfo->ImageFileName->Length);
+        } else {
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou][ProcessCallback] Failed to allocate memory\n");
+        }
+    }
+    if (CreateInfo->CommandLine != NULL) {
+        pCommandLine = (PWSTR)ExAllocatePoolWithTag(PagedPool, CreateInfo->CommandLine->Length + sizeof(WCHAR), MILOU_PROC_CB_TAG);
+        if (pCommandLine != NULL) {
+            RtlSecureZeroMemory(pCommandLine, CreateInfo->CommandLine->Length + sizeof(WCHAR));
+            RtlCopyMemory(pCommandLine, CreateInfo->CommandLine->Buffer, CreateInfo->CommandLine->Length);
+        } else {
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou][ProcessCallback] Failed to allocate memory\n");
+        }
+    }
+
+    EventWriteMilouProcCreateEvent(NULL,
+                                   (SIZE_T)ProcessId,
+                                   (SIZE_T)CreateInfo->ParentProcessId,
+                                   (SIZE_T)CreateInfo->CreatingThreadId.UniqueProcess,
+                                   (SIZE_T)CreateInfo->CreatingThreadId.UniqueThread,
+                                   CreateInfo->IsSubsystemProcess ? L"Not Win32" : L"Win32",
+                                   pImageFileName != NULL ? pImageFileName : L"Not available",
+                                   pCommandLine != NULL ? pCommandLine : L"Not available");
+
+    if (pImageFileName != NULL) {
+        ExFreePoolWithTag(pImageFileName, MILOU_PROC_CB_TAG);
+        pImageFileName = NULL;
+    }
+    if (pCommandLine != NULL) {
+        ExFreePoolWithTag(pCommandLine, MILOU_PROC_CB_TAG);
+        pCommandLine = NULL;
+    }
+}
+
+_Use_decl_annotations_
+BOOLEAN
+RegisterProcessCallback(
+    _In_    BOOLEAN Remove
+)
+{
+    NTSTATUS ntStatus;
+
+    ntStatus = PsSetCreateProcessNotifyRoutineEx((PCREATE_PROCESS_NOTIFY_ROUTINE_EX)MilouProcessCallback, Remove);
+    if (!NT_SUCCESS(ntStatus)) {
+        if (!Remove) {
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to register process callback: %#X\n", ntStatus);
+        } else {
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to unregister process callback: %#X\n", ntStatus);
+        }
+
+        return FALSE;
+    } else {
+        if (!Remove) {
+            g_IsProcessCallbackActive = TRUE;
+        } else {
+            g_IsProcessCallbackActive = FALSE;
+        }
+
+        return TRUE;
+    }
+}
+
+_Use_decl_annotations_
+BOOLEAN
+UnregisterProcessCallback(
+    VOID
+)
+{
+    if (!g_IsProcessCallbackActive) {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Process callback is not active. Nothing to unregister\n");
+
+        return TRUE;
+    }
+    return RegisterProcessCallback(TRUE);
 }

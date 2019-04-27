@@ -29,6 +29,12 @@ RegisterCallbacks(
         DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Registry callback not enabled!\n");
     }
 
+    if (RegisterProcessCallback(FALSE)) {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Process creation/exit callback enabled!\n");
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Process creation/exit callback not enabled!\n");
+    }
+
     return TRUE;
 }
 
@@ -40,6 +46,12 @@ UnregisterCallbacks(VOID)
         DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Registry callback disabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Registry callback not disabled!\n");
+    }
+
+    if (RegisterProcessCallback(TRUE)) {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Process creation/exit callback disabled!\n");
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Process creation/exit callback not disabled!\n");
     }
 
     return TRUE;
