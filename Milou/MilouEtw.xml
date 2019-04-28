@@ -18,6 +18,7 @@
 					<event symbol="MilouRegPreCreateKeyExEvent" value="31344" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreCreateKeyEx" message="$(string.Milou Driver.event.31344.message)"></event>
 					<event symbol="MilouProcCreateEvent" value="31345" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogProcCreate" message="$(string.Milou Driver.event.31345.message)"></event>
 					<event symbol="MilouProcExitEvent" value="31346" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogProcExit" message="$(string.Milou Driver.event.31346.message)"></event>
+					<event symbol="MilouThreadEvent" value="31347" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogThread" message="$(string.Milou Driver.event.31347.message)"></event>
 				</events>
 				<levels></levels>
 				<tasks></tasks>
@@ -115,6 +116,11 @@
 					<template tid="MilouLogProcExit">
 						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
 					</template>
+					<template tid="MilouLogThread">
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="Created" inType="win:Boolean" outType="xs:boolean"></data>
+					</template>
 				</templates>
 			</provider>
 		</events>
@@ -128,6 +134,7 @@
 				<string id="channel.System" value="System"></string>
 				<string id="channel.Application" value="Application"></string>
 				<string id="MilouEvent.EventMessage" value="Milou Message"></string>
+				<string id="Milou Driver.event.31347.message" value="Milou Thread Callback Create/Delete"></string>
 				<string id="Milou Driver.event.31346.message" value="Milou Process Callback Exit"></string>
 				<string id="Milou Driver.event.31345.message" value="Milou Process Callback Create Event"></string>
 				<string id="Milou Driver.event.31344.message" value="Milou Registry Callback Create KeyEx"></string>
@@ -137,7 +144,7 @@
 				<string id="Milou Driver.event.31340.message" value="Milou Registry Callback Delete Value"></string>
 				<string id="Milou Driver.event.31339.message" value="Milou Registry Callback Set Value"></string>
 				<string id="Milou Driver.event.31338.message" value="Milou Registry Callback Delete Key"></string>
-				<string id="Milou Driver.channel.Milou.message" value="ETW Log"></string>
+				<string id="Milou Driver.channel.Milou.message" value="MilouFlt Log"></string>
 				<string id="Milou Driver.Keyword.reg.message" value="Registry callback"></string>
 				<string id="Milou Driver.Keyword.Milou_registry.message" value="Milou registry callback"></string>
 			</stringTable>

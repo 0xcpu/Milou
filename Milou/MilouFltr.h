@@ -17,6 +17,7 @@ extern  SIZE_T      g_CallbackCtxListNumEntries;
 extern  BOOLEAN     g_IsWindows8OrGreater;
 extern  BOOLEAN     g_IsRegistryCallbackActive;
 extern  BOOLEAN     g_IsProcessCallbackActive;
+extern  BOOLEAN     g_IsThreadCallbackActive;
 
 typedef struct _MILOU_CALLBACK_CONTEXT {
     LIST_ENTRY      CallbackCtxList;
@@ -46,6 +47,18 @@ RegisterProcessCallback(
 _Success_(return == TRUE)
 BOOLEAN
 UnregisterProcessCallback(
+    VOID
+);
+
+_Success_(return == TRUE)
+BOOLEAN
+RegisterThreadCallback(
+    VOID
+);
+
+_Success_(return == TRUE)
+BOOLEAN
+UnregisterThreadCallback(
     VOID
 );
 

@@ -2,6 +2,7 @@
 
 #include "MilouFltr.h"
 
+
 _Success_(NT_SUCCESS(return) == TRUE)
 NTSTATUS
 CaptureBuffer(

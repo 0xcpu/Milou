@@ -6,6 +6,7 @@
 // at the same time is minimal?
 BOOLEAN g_IsRegistryCallbackActive;
 BOOLEAN g_IsProcessCallbackActive;
+BOOLEAN g_IsThreadCallbackActive;
 
 // Driver callbacks
 EX_CALLBACK_FUNCTION    MilouRegistryCallback;
@@ -732,7 +733,9 @@ RegisterRegistryCallback(
 
     pMilouCallbackContext = CreateCallbackContext(AltitudeName);
     if (NULL == pMilouCallbackContext) {
-        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to create callback context\n");
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   "[Milou][RegisterRegistryCallback] Failed to create callback context\n");
 
         return FALSE;
     }
@@ -745,11 +748,16 @@ RegisterRegistryCallback(
                                     NULL);
     if (NT_SUCCESS(ntStatus)) {
         if (!InsertCallbackContext(pMilouCallbackContext)) {
-            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to insert callback context\n");
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_ERROR_LEVEL,
+                       "[Milou][RegisterRegistryCallback] Failed to insert callback context\n");
 
             ntStatus = CmUnRegisterCallback(pMilouCallbackContext->Cookie);
             if (!NT_SUCCESS(ntStatus)) {
-                DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to unregister callback: %#X\n", ntStatus);
+                DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                           DPFLTR_ERROR_LEVEL,
+                           "[Milou][RegisterRegistryCallback] Failed to unregister callback: %#X\n",
+                           ntStatus);
             }
              
             retStatus = FALSE;
@@ -759,7 +767,10 @@ RegisterRegistryCallback(
             g_IsRegistryCallbackActive = TRUE;
         }
     } else {
-        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to register callback: %#X\n", ntStatus);
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   "[Milou][RegisterRegistryCallback] Failed to register callback: %#X\n",
+                   ntStatus);
 
     cleanup:
         DeleteCallbackContext(pMilouCallbackContext);
@@ -786,7 +797,9 @@ UnregisterRegistryCallback(
     BOOLEAN                 retStatus = TRUE;
 
     if (!g_IsRegistryCallbackActive) {
-        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Registry callback is not active. Nothing to unregister\n");
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_INFO_LEVEL,
+                   "[Milou][UnregisterRegistryCallback] Registry callback is not active. Nothing to unregister\n");
 
         return retStatus;
     }
@@ -798,13 +811,18 @@ UnregisterRegistryCallback(
                                               CallbackCtxList);
         ntStatus = CmUnRegisterCallback(pMilouCallbackCtx->Cookie);
         if (!NT_SUCCESS(ntStatus)) {
-            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to unregister callback: %#X\n", ntStatus);
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_ERROR_LEVEL,
+                       "[Milou][UnregisterRegistryCallback] Failed to unregister callback: %#X\n",
+                       ntStatus);
 
             retStatus = FALSE;
 
             break;
         } else {
-            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Register callback unregistered\n");
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_INFO_LEVEL,
+                       "[Milou][UnregisterRegistryCallback] Register callback unregistered\n");
 
             g_IsRegistryCallbackActive = FALSE;
 
@@ -813,9 +831,13 @@ UnregisterRegistryCallback(
                 DeleteCallbackContext(pMilouCallbackCtx);
                 pMilouCallbackCtx = NULL;
 
-                DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Callback context deleted\n");
+                DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                           DPFLTR_INFO_LEVEL,
+                           "[Milou][UnregisterRegistryCallback] Callback context deleted\n");
             } else {
-                DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to find and delete context\n");
+                DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                           DPFLTR_ERROR_LEVEL,
+                           "[Milou][UnregisterRegistryCallback] Failed to find and delete context\n");
             }
         }         
 
@@ -853,21 +875,29 @@ MilouProcessCallback(
     // that probably isn't NULL terminated isn't going to do much better.
     //
     if (CreateInfo->ImageFileName != NULL) {
-        pImageFileName = (PWSTR)ExAllocatePoolWithTag(PagedPool, CreateInfo->ImageFileName->Length + sizeof(WCHAR), MILOU_PROC_CB_TAG);
+        pImageFileName = (PWSTR)ExAllocatePoolWithTag(PagedPool,
+                                                      CreateInfo->ImageFileName->Length + sizeof(WCHAR),
+                                                      MILOU_PROC_CB_TAG);
         if (pImageFileName != NULL) {
             RtlSecureZeroMemory(pImageFileName, CreateInfo->ImageFileName->Length + sizeof(WCHAR));
             RtlCopyMemory(pImageFileName, CreateInfo->ImageFileName->Buffer, CreateInfo->ImageFileName->Length);
         } else {
-            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou][ProcessCallback] Failed to allocate memory\n");
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_ERROR_LEVEL,
+                       "[Milou][ProcessCallback] Failed to allocate memory\n");
         }
     }
     if (CreateInfo->CommandLine != NULL) {
-        pCommandLine = (PWSTR)ExAllocatePoolWithTag(PagedPool, CreateInfo->CommandLine->Length + sizeof(WCHAR), MILOU_PROC_CB_TAG);
+        pCommandLine = (PWSTR)ExAllocatePoolWithTag(PagedPool,
+                                                    CreateInfo->CommandLine->Length + sizeof(WCHAR),
+                                                    MILOU_PROC_CB_TAG);
         if (pCommandLine != NULL) {
             RtlSecureZeroMemory(pCommandLine, CreateInfo->CommandLine->Length + sizeof(WCHAR));
             RtlCopyMemory(pCommandLine, CreateInfo->CommandLine->Buffer, CreateInfo->CommandLine->Length);
         } else {
-            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou][ProcessCallback] Failed to allocate memory\n");
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_ERROR_LEVEL,
+                       "[Milou][ProcessCallback] Failed to allocate memory\n");
         }
     }
 
@@ -901,9 +931,15 @@ RegisterProcessCallback(
     ntStatus = PsSetCreateProcessNotifyRoutineEx((PCREATE_PROCESS_NOTIFY_ROUTINE_EX)MilouProcessCallback, Remove);
     if (!NT_SUCCESS(ntStatus)) {
         if (!Remove) {
-            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to register process callback: %#X\n", ntStatus);
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_ERROR_LEVEL,
+                       "[Milou][RegisterProcessCallback] Failed to register process callback: %#X\n",
+                       ntStatus);
         } else {
-            DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[Milou] Failed to unregister process callback: %#X\n", ntStatus);
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_ERROR_LEVEL,
+                       "[Milou][RegisterProcessCallback] Failed to unregister process callback: %#X\n",
+                       ntStatus);
         }
 
         return FALSE;
@@ -925,9 +961,76 @@ UnregisterProcessCallback(
 )
 {
     if (!g_IsProcessCallbackActive) {
-        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "[Milou] Process callback is not active. Nothing to unregister\n");
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_INFO_LEVEL,
+                   "[Milou][UnregisterProcessCallback] Process callback is not active. Nothing to unregister\n");
 
         return TRUE;
     }
     return RegisterProcessCallback(TRUE);
+}
+
+VOID
+MilouThreadCallback(
+    HANDLE  ProcessId,
+    HANDLE  ThreadId,
+    BOOLEAN Create
+)
+{
+    PAGED_CODE();
+
+    EventWriteMilouThreadEvent(NULL,
+                               (SIZE_T)ProcessId,
+                               (SIZE_T)ThreadId,
+                               Create);
+}
+
+_Use_decl_annotations_
+BOOLEAN
+RegisterThreadCallback(
+    VOID
+)
+{
+    NTSTATUS ntStatus = PsSetCreateThreadNotifyRoutine((PCREATE_THREAD_NOTIFY_ROUTINE)MilouThreadCallback);
+    if (NT_SUCCESS(ntStatus)) {
+        g_IsThreadCallbackActive = TRUE;
+
+        return TRUE;
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   "[Milou][RegisterThreadCallback] Failed to register thread callback: %#X\n",
+                   ntStatus);
+
+        return FALSE;
+    }
+}
+
+_Use_decl_annotations_
+BOOLEAN
+UnregisterThreadCallback(
+    VOID
+)
+{
+    if (!g_IsThreadCallbackActive) {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_INFO_LEVEL,
+                   "[Milou][UnregisterThreadCallback] Thread callback is not active. Nothing to unregister\n");
+
+        return TRUE;
+    }
+
+    NTSTATUS ntStatus = PsRemoveCreateThreadNotifyRoutine((PCREATE_THREAD_NOTIFY_ROUTINE)MilouThreadCallback);
+    if (NT_SUCCESS(ntStatus)) {
+        g_IsThreadCallbackActive = FALSE;
+
+        return TRUE;
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   "[Milou][UnregisterThreadCallback] Failed to unregister thread callback: %#X\n",
+                   ntStatus);
+
+        return FALSE;
+    }
 }

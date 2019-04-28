@@ -1,5 +1,6 @@
 #include "MilouUtils.h"
 
+
 FAST_MUTEX  g_CallbackCtxListMutex;
 LIST_ENTRY  g_CallbackCtxListHead;
 SIZE_T      g_CallbackCtxListNumEntries;
@@ -202,7 +203,6 @@ CaptureBuffer(
     return ntStatus;
 }
 
-
 VOID
 FreeCapturedBuffer(
     _In_    PVOID   CapturedBuffer,
@@ -214,7 +214,6 @@ FreeCapturedBuffer(
         CapturedBuffer = NULL;
     }
 }
-
 
 NTSTATUS
 CaptureUnicodeString(

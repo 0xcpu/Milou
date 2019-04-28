@@ -547,7 +547,7 @@ Remarks:
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Provider "Milou Driver" event count 14
+// Provider "Milou Driver" event count 15
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // Provider GUID = 20d8760d-4d46-46ce-98ae-0e44ba6c1f6a
@@ -593,6 +593,8 @@ EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouProcCreateEvent = {0x
 #define MilouProcCreateEvent_value 0x7a71
 EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouProcExitEvent = {0x7a72, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
 #define MilouProcExitEvent_value 0x7a72
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouThreadEvent = {0x7a73, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define MilouThreadEvent_value 0x7a73
 
 //
 // MCGEN_DISABLE_PROVIDER_CODE_GENERATION macro:
@@ -853,6 +855,20 @@ EXTERN_C __declspec(selectany) MCGEN_TRACE_CONTEXT MilouGuid_Context = {0, (ULON
 #define EventWriteMilouProcExitEvent_AssumeEnabled(Pid) \
         McTemplateK0x(&MilouGuid_Context, &MilouProcExitEvent, NULL, Pid)
 
+//
+// Enablement check macro for MilouThreadEvent
+//
+#define EventEnabledMilouThreadEvent() MCGEN_EVENT_BIT_SET(Milou_DriverEnableBits, 0)
+
+//
+// Event write macros for MilouThreadEvent
+//
+#define EventWriteMilouThreadEvent(Activity, Pid, Tid, Created) \
+        MCGEN_EVENT_ENABLED(MilouThreadEvent) \
+        ? McTemplateK0xxt(&MilouGuid_Context, &MilouThreadEvent, Activity, Pid, Tid, Created) : 0
+#define EventWriteMilouThreadEvent_AssumeEnabled(Pid, Tid, Created) \
+        McTemplateK0xxt(&MilouGuid_Context, &MilouThreadEvent, NULL, Pid, Tid, Created)
+
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 //
@@ -888,6 +904,36 @@ McTemplateK0x(
     return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0x_ARGCOUNT + 1, EventData);
 }
 #endif // McTemplateK0x_def
+
+//
+//Template from manifest : MilouLogThread
+//
+#ifndef McTemplateK0xxt_def
+#define McTemplateK0xxt_def
+ETW_INLINE
+ULONG
+McTemplateK0xxt(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_opt_ const GUID* Activity,
+    _In_ const unsigned __int64  _Arg0,
+    _In_ const unsigned __int64  _Arg1,
+    _In_ const signed int  _Arg2
+    )
+{
+#define McTemplateK0xxt_ARGCOUNT 3
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0xxt_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],&_Arg0, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed int)  );
+
+    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0xxt_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateK0xxt_def
 
 //
 //Template from manifest : MilouLogProcCreate
@@ -1303,4 +1349,5 @@ McTemplateK0zzzxxx(
 #define MSG_Milou_Driver_event_31344_message 0xB0007A70L
 #define MSG_Milou_Driver_event_31345_message 0xB0007A71L
 #define MSG_Milou_Driver_event_31346_message 0xB0007A72L
+#define MSG_Milou_Driver_event_31347_message 0xB0007A73L
 #define MSG_MilouEvent_EventMessage          0xB0017A69L
