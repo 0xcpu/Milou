@@ -841,6 +841,14 @@ UnregisterRegistryCallback(
             }
         }         
 
+        if (IsListEmpty(&g_CallbackCtxListHead)) {
+            DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                       DPFLTR_INFO_LEVEL,
+                       "[Milou][UnregisterRegistryCallback] Empty list.\n");
+
+            break;
+        }
+
         pListEntry = pListEntry->Flink;
     }
 
