@@ -35,7 +35,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MilouFsFilter.rc" />
     <ClCompile Include="MilouCtxFilter.c" />
     <ClCompile Include="MilouFsFilter.c" />
     <Inf Include="MilouFsFilter.inf" />
