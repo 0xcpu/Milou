@@ -26,31 +26,31 @@ RegisterCallbacks(
     if (RegisterRegistryCallback(DeviceObject, L"Tintin")) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   "[Milou][RegisterCallbacks] Registry callback enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Registry callback enabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][RegisterCallbacks] Registry callback not enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Registry callback not enabled!\n");
     }
 
     if (RegisterProcessCallback(FALSE)) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   "[Milou][RegisterCallbacks] Process creation/exit callback enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Process creation/exit callback enabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][RegisterCallbacks] Process creation/exit callback not enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Process creation/exit callback not enabled!\n");
     }
 
     if (RegisterThreadCallback()) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   "[Milou][RegisterCallbacks] Thread creation/exit callback enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Thread creation/exit callback enabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][RegisterCallbacks] Thread creation/exit callback not enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Thread creation/exit callback not enabled!\n");
     }
 
     return TRUE;
@@ -63,31 +63,31 @@ UnregisterCallbacks(VOID)
     if (UnregisterRegistryCallback()) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   "[Milou][UnregisterCallbacks] Registry callback disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Registry callback disabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][UnregisterCallbacks] Registry callback not disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Registry callback not disabled!\n");
     }
 
     if (UnregisterProcessCallback()) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   "[Milou][UnregisterCallbacks] Process creation/exit callback disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Process creation/exit callback disabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][UnregisterCallbacks] Process creation/exit callback not disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Process creation/exit callback not disabled!\n");
     }
 
     if (UnregisterThreadCallback()) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   "[Milou][UnregisterCallbacks] Thread creation/exit callback disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Thread creation/exit callback disabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][UnregisterCallbacks] Thread creation/exit callback not disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ "Thread creation/exit callback not disabled!\n");
     }
 
     return TRUE;

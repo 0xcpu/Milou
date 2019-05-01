@@ -21,7 +21,7 @@ CreateCallbackContext(
     if (NULL == pMilouCallbackCtx) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][CreateCallbackContext] Failed to allocate callback ctx\n");
+                   MILOU_LOG_P __FUNCTION__ "Failed to allocate callback ctx\n");
 
         return NULL;
     }
@@ -97,7 +97,7 @@ FindAndRemoveCallbackContext(
             if (isListEmpty) {
                 DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                            DPFLTR_INFO_LEVEL,
-                           "[Milou][FindAndRemoveCallbackContext] Removed last element from the list.\n");
+                           MILOU_LOG_P __FUNCTION__ "Removed last element from the list.\n");
             }
             InterlockedDecrement((volatile LONG *)&g_CallbackCtxListNumEntries);
 
@@ -145,17 +145,17 @@ DetectOSVersion()
 
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   "[Milou][DetectOSVersion] Detected Windows 7 or an older version.\n");
+                   MILOU_LOG_P __FUNCTION__ "Detected Windows 7 or an older version.\n");
     } else if (Status == STATUS_REVISION_MISMATCH) {
         g_IsWindows8OrGreater = TRUE;
         
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   "[Milou][DetectOSVersion] Detected Windows 8 or a newer version.\n");
+                   MILOU_LOG_P __FUNCTION__ "Detected Windows 8 or a newer version.\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][DetectOSVersion] Failed to detect Windows version. Assuming it is Windows 8 or newer.\n");
+                   MILOU_LOG_P __FUNCTION__ "Failed to detect Windows version. Assuming it is Windows 8 or newer.\n");
 
         g_IsWindows8OrGreater = TRUE;
     }
@@ -193,13 +193,13 @@ CaptureBuffer(
             ntStatus = GetExceptionCode();
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       "[Milou][CaptureBuffer] Failed capturing buffer, exception %#X\n",
+                       MILOU_LOG_P __FUNCTION__ "Failed capturing buffer, exception %#X\n",
                        ntStatus);
         }
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][CaptureBuffer] Failed capturing buffer, insufficient resources!\n");
+                   MILOU_LOG_P __FUNCTION__ "Failed capturing buffer, insufficient resources!\n");
 
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -259,13 +259,13 @@ CaptureUnicodeString(
             ntStatus = GetExceptionCode();
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       "[Milou][CaptureUnicodeString] Failed capturing unicode buffer, exception %#X\n",
+                       MILOU_LOG_P __FUNCTION__ "Failed capturing unicode buffer, exception %#X\n",
                        ntStatus);
         }
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   "[Milou][CaptureUnicodeString] Failed capturing unicode buffer, insufficient resources!\n");
+                   MILOU_LOG_P __FUNCTION__ "Failed capturing unicode buffer, insufficient resources!\n");
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 

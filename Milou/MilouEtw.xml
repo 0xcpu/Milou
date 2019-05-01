@@ -4,24 +4,28 @@
 		<events>
 			<provider name="Milou Driver" guid="{20D8760D-4D46-46CE-98AE-0E44BA6C1F6A}" symbol="MilouGuid" resourceFileName="%SystemDrive%\Milou\Milou.sys" messageFileName="%SystemDrive%\Milou\Milou.sys">
 				<events>
-					<event symbol="MilouEvent" value="31337" version="1" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLog" message="$(string.MilouEvent.EventMessage)"></event>
-					<event symbol="MilouRegPreDeleteKeyEvent" value="31338" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreDeleteKey" message="$(string.Milou Driver.event.31338.message)"></event>
-					<event symbol="MilouRegPreSetValueKeyBinEvent" value="31339" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetValueKeyBin" message="$(string.Milou Driver.event.31339.message)"></event>
-					<event symbol="MilouRegPreSetValueKeyDwordEvent" value="31339" version="1" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetValueKeyDword" message="$(string.Milou Driver.event.31339.message)"></event>
-					<event symbol="MilouRegPreSetValueKeyUcStrEvent" value="31339" version="2" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetValueKeyUcStr" message="$(string.Milou Driver.event.31339.message)"></event>
-					<event symbol="MilouRegPreSetValueKeyQwordEvent" value="31339" version="3" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetValueKeyQword" message="$(string.Milou Driver.event.31339.message)"></event>
-					<event symbol="MilouRegPreDeleteValueKeyEvent" value="31340" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreDeleteValueKey" message="$(string.Milou Driver.event.31340.message)"></event>
-					<event symbol="MilouRegPreSetInformationKeyQwordEvent" value="31341" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetInformationQwordKey" message="$(string.Milou Driver.event.31341.message)"></event>
-					<event symbol="MilouRegPreSetInformationKeyUcStrEvent" value="31341" version="1" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreSetInformationUcStrKey" message="$(string.Milou Driver.event.31341.message)"></event>
-					<event symbol="MilouRegPreRenameKeyEvent" value="31342" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreRenameKey" message="$(string.Milou Driver.event.31342.message)"></event>
-					<event symbol="MilouRegPreCreateKeyEvent" value="31343" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreCreateKey" message="$(string.Milou Driver.event.31343.message)"></event>
-					<event symbol="MilouRegPreCreateKeyExEvent" value="31344" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogRegPreCreateKeyEx" message="$(string.Milou Driver.event.31344.message)"></event>
-					<event symbol="MilouProcCreateEvent" value="31345" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogProcCreate" message="$(string.Milou Driver.event.31345.message)"></event>
-					<event symbol="MilouProcExitEvent" value="31346" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogProcExit" message="$(string.Milou Driver.event.31346.message)"></event>
-					<event symbol="MilouThreadEvent" value="31347" version="0" channel="Milou" level="win:Informational" task="win:None" opcode="win:Info" template="MilouLogThread" message="$(string.Milou Driver.event.31347.message)"></event>
+					<event symbol="MilouEvent" value="31337" version="1" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLog" message="$(string.MilouEvent.EventMessage)"></event>
+					<event symbol="MilouRegPreDeleteKeyEvent" value="31338" version="0" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreDeleteKey" message="$(string.Milou Driver.event.31338.message)"></event>
+					<event symbol="MilouRegPreSetValueKeyBinEvent" value="31339" version="0" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreSetValueKeyBin" message="$(string.Milou Driver.event.31339.message)"></event>
+					<event symbol="MilouRegPreSetValueKeyDwordEvent" value="31339" version="1" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreSetValueKeyDword" message="$(string.Milou Driver.event.31339.message)"></event>
+					<event symbol="MilouRegPreSetValueKeyUcStrEvent" value="31339" version="2" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreSetValueKeyUcStr" message="$(string.Milou Driver.event.31339.message)"></event>
+					<event symbol="MilouRegPreSetValueKeyQwordEvent" value="31339" version="3" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreSetValueKeyQword" message="$(string.Milou Driver.event.31339.message)"></event>
+					<event symbol="MilouRegPreDeleteValueKeyEvent" value="31340" version="0" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreDeleteValueKey" message="$(string.Milou Driver.event.31340.message)"></event>
+					<event symbol="MilouRegPreSetInformationKeyQwordEvent" value="31341" version="0" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreSetInformationQwordKey" message="$(string.Milou Driver.event.31341.message)"></event>
+					<event symbol="MilouRegPreSetInformationKeyUcStrEvent" value="31341" version="1" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreSetInformationUcStrKey" message="$(string.Milou Driver.event.31341.message)"></event>
+					<event symbol="MilouRegPreRenameKeyEvent" value="31342" version="0" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreRenameKey" message="$(string.Milou Driver.event.31342.message)"></event>
+					<event symbol="MilouRegPreCreateKeyEvent" value="31343" version="0" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreCreateKey" message="$(string.Milou Driver.event.31343.message)"></event>
+					<event symbol="MilouRegPreCreateKeyExEvent" value="31344" version="0" channel="Milou" level="win:Informational" task="RegistryTask" opcode="win:Info" template="MilouLogRegPreCreateKeyEx" message="$(string.Milou Driver.event.31344.message)"></event>
+					<event symbol="MilouProcCreateEvent" value="31345" version="0" channel="Milou" level="win:Informational" task="ProcessTask" opcode="win:Info" template="MilouLogProcCreate" message="$(string.Milou Driver.event.31345.message)"></event>
+					<event symbol="MilouProcExitEvent" value="31346" version="0" channel="Milou" level="win:Informational" task="ProcessTask" opcode="win:Info" template="MilouLogProcExit" message="$(string.Milou Driver.event.31346.message)"></event>
+					<event symbol="MilouThreadEvent" value="31347" version="0" channel="Milou" level="win:Informational" task="ThreadTask" opcode="win:Info" template="MilouLogThread" message="$(string.Milou Driver.event.31347.message)"></event>
 				</events>
 				<levels></levels>
-				<tasks></tasks>
+				<tasks>
+					<task name="RegistryTask" symbol="RegistryTask" value="1" eventGUID="{E53E31F3-3390-4FC5-95B7-B169ECD50E01}" message="$(string.Milou Driver.task.Registry.message)"></task>
+					<task name="ProcessTask" symbol="ProcessTask" value="2" eventGUID="{B0A62E22-918C-47CA-8ECD-BCCBA6A4EBEE}" message="$(string.Milou Driver.task.Process.message)"></task>
+					<task name="ThreadTask" symbol="ThreadTask" value="3" eventGUID="{3CA8ED4B-B230-4303-97FF-DC45D2B991C1}" message="$(string.Milou Driver.task.Thread.message)"></task>
+				</tasks>
 				<opcodes></opcodes>
 				<channels>
 					<channel name="Milou" chid="Milou" symbol="Milou" type="Analytic" enabled="true" message="$(string.Milou Driver.channel.Milou.message)"></channel>
@@ -134,6 +138,9 @@
 				<string id="channel.System" value="System"></string>
 				<string id="channel.Application" value="Application"></string>
 				<string id="MilouEvent.EventMessage" value="Milou Message"></string>
+				<string id="Milou Driver.task.Thread.message" value="Milou Thread Task"></string>
+				<string id="Milou Driver.task.Registry.message" value="Milou Registry Task"></string>
+				<string id="Milou Driver.task.Process.message" value="Milou Process Task"></string>
 				<string id="Milou Driver.event.31347.message" value="Milou Thread Callback Create/Delete"></string>
 				<string id="Milou Driver.event.31346.message" value="Milou Process Callback Exit"></string>
 				<string id="Milou Driver.event.31345.message" value="Milou Process Callback Create Event"></string>

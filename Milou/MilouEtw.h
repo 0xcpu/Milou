@@ -563,37 +563,47 @@ EXTERN_C __declspec(selectany) const GUID MilouGuid = {0x20d8760d, 0x4d46, 0x46c
 #define Milou 0x10
 
 //
+// Tasks
+//
+#define RegistryTask 0x1
+EXTERN_C __declspec(selectany) const GUID RegistryTaskId = {0xe53e31f3, 0x3390, 0x4fc5, {0x95, 0xb7, 0xb1, 0x69, 0xec, 0xd5, 0x0e, 0x01}};
+#define ProcessTask 0x2
+EXTERN_C __declspec(selectany) const GUID ProcessTaskId = {0xb0a62e22, 0x918c, 0x47ca, {0x8e, 0xcd, 0xbc, 0xcb, 0xa6, 0xa4, 0xeb, 0xee}};
+#define ThreadTask 0x3
+EXTERN_C __declspec(selectany) const GUID ThreadTaskId = {0x3ca8ed4b, 0xb230, 0x4303, {0x97, 0xff, 0xdc, 0x45, 0xd2, 0xb9, 0x91, 0xc1}};
+
+//
 // Event Descriptors
 //
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouEvent = {0x7a69, 0x1, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouEvent = {0x7a69, 0x1, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouEvent_value 0x7a69
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreDeleteKeyEvent = {0x7a6a, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreDeleteKeyEvent = {0x7a6a, 0x0, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreDeleteKeyEvent_value 0x7a6a
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetValueKeyBinEvent = {0x7a6b, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetValueKeyBinEvent = {0x7a6b, 0x0, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreSetValueKeyBinEvent_value 0x7a6b
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetValueKeyDwordEvent = {0x7a6b, 0x1, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetValueKeyDwordEvent = {0x7a6b, 0x1, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreSetValueKeyDwordEvent_value 0x7a6b
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetValueKeyUcStrEvent = {0x7a6b, 0x2, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetValueKeyUcStrEvent = {0x7a6b, 0x2, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreSetValueKeyUcStrEvent_value 0x7a6b
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetValueKeyQwordEvent = {0x7a6b, 0x3, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetValueKeyQwordEvent = {0x7a6b, 0x3, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreSetValueKeyQwordEvent_value 0x7a6b
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreDeleteValueKeyEvent = {0x7a6c, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreDeleteValueKeyEvent = {0x7a6c, 0x0, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreDeleteValueKeyEvent_value 0x7a6c
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetInformationKeyQwordEvent = {0x7a6d, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetInformationKeyQwordEvent = {0x7a6d, 0x0, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreSetInformationKeyQwordEvent_value 0x7a6d
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetInformationKeyUcStrEvent = {0x7a6d, 0x1, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreSetInformationKeyUcStrEvent = {0x7a6d, 0x1, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreSetInformationKeyUcStrEvent_value 0x7a6d
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreRenameKeyEvent = {0x7a6e, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreRenameKeyEvent = {0x7a6e, 0x0, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreRenameKeyEvent_value 0x7a6e
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreCreateKeyEvent = {0x7a6f, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreCreateKeyEvent = {0x7a6f, 0x0, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreCreateKeyEvent_value 0x7a6f
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreCreateKeyExEvent = {0x7a70, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouRegPreCreateKeyExEvent = {0x7a70, 0x0, 0x10, 0x4, 0x0, 0x1, 0x8000000000000000};
 #define MilouRegPreCreateKeyExEvent_value 0x7a70
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouProcCreateEvent = {0x7a71, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouProcCreateEvent = {0x7a71, 0x0, 0x10, 0x4, 0x0, 0x2, 0x8000000000000000};
 #define MilouProcCreateEvent_value 0x7a71
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouProcExitEvent = {0x7a72, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouProcExitEvent = {0x7a72, 0x0, 0x10, 0x4, 0x0, 0x2, 0x8000000000000000};
 #define MilouProcExitEvent_value 0x7a72
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouThreadEvent = {0x7a73, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouThreadEvent = {0x7a73, 0x0, 0x10, 0x4, 0x0, 0x3, 0x8000000000000000};
 #define MilouThreadEvent_value 0x7a73
 
 //
@@ -1338,7 +1348,9 @@ McTemplateK0zzzxxx(
 
 #define MSG_opcode_Info                      0x30000000L
 #define MSG_level_Informational              0x50000004L
-#define MSG_task_None                        0x70000000L
+#define MSG_Milou_Driver_task_Registry_message 0x70000001L
+#define MSG_Milou_Driver_task_Process_message 0x70000002L
+#define MSG_Milou_Driver_task_Thread_message 0x70000003L
 #define MSG_Milou_Driver_channel_Milou_message 0x90000001L
 #define MSG_Milou_Driver_event_31338_message 0xB0007A6AL
 #define MSG_Milou_Driver_event_31339_message 0xB0007A6BL

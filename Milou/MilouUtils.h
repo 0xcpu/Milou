@@ -3,6 +3,11 @@
 #include "MilouFltr.h"
 
 
+//
+// Logging prefix
+//
+#define MILOU_LOG_P    "[Milou]:"
+
 _Success_(NT_SUCCESS(return) == TRUE)
 NTSTATUS
 CaptureBuffer(
