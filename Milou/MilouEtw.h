@@ -547,7 +547,7 @@ Remarks:
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Provider "Milou Driver" event count 15
+// Provider "Milou Driver" event count 16
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // Provider GUID = 20d8760d-4d46-46ce-98ae-0e44ba6c1f6a
@@ -571,6 +571,8 @@ EXTERN_C __declspec(selectany) const GUID RegistryTaskId = {0xe53e31f3, 0x3390, 
 EXTERN_C __declspec(selectany) const GUID ProcessTaskId = {0xb0a62e22, 0x918c, 0x47ca, {0x8e, 0xcd, 0xbc, 0xcb, 0xa6, 0xa4, 0xeb, 0xee}};
 #define ThreadTask 0x3
 EXTERN_C __declspec(selectany) const GUID ThreadTaskId = {0x3ca8ed4b, 0xb230, 0x4303, {0x97, 0xff, 0xdc, 0x45, 0xd2, 0xb9, 0x91, 0xc1}};
+#define LoadImageTask 0x4
+EXTERN_C __declspec(selectany) const GUID LoadImageTaskId = {0x61dc0880, 0x042a, 0x4d1b, {0x8c, 0x7b, 0x9e, 0xce, 0xa6, 0x44, 0x9b, 0x2c}};
 
 //
 // Event Descriptors
@@ -605,6 +607,8 @@ EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouProcExitEvent = {0x7a
 #define MilouProcExitEvent_value 0x7a72
 EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouThreadEvent = {0x7a73, 0x0, 0x10, 0x4, 0x0, 0x3, 0x8000000000000000};
 #define MilouThreadEvent_value 0x7a73
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MilouLoadImageEvent = {0x7a74, 0x0, 0x10, 0x4, 0x0, 0x4, 0x8000000000000000};
+#define MilouLoadImageEvent_value 0x7a74
 
 //
 // MCGEN_DISABLE_PROVIDER_CODE_GENERATION macro:
@@ -879,6 +883,20 @@ EXTERN_C __declspec(selectany) MCGEN_TRACE_CONTEXT MilouGuid_Context = {0, (ULON
 #define EventWriteMilouThreadEvent_AssumeEnabled(Pid, Tid, Created) \
         McTemplateK0xxt(&MilouGuid_Context, &MilouThreadEvent, NULL, Pid, Tid, Created)
 
+//
+// Enablement check macro for MilouLoadImageEvent
+//
+#define EventEnabledMilouLoadImageEvent() MCGEN_EVENT_BIT_SET(Milou_DriverEnableBits, 0)
+
+//
+// Event write macros for MilouLoadImageEvent
+//
+#define EventWriteMilouLoadImageEvent(Activity, FullImageName, Pid, ImageBase, ImageSize) \
+        MCGEN_EVENT_ENABLED(MilouLoadImageEvent) \
+        ? McTemplateK0zxii(&MilouGuid_Context, &MilouLoadImageEvent, Activity, FullImageName, Pid, ImageBase, ImageSize) : 0
+#define EventWriteMilouLoadImageEvent_AssumeEnabled(FullImageName, Pid, ImageBase, ImageSize) \
+        McTemplateK0zxii(&MilouGuid_Context, &MilouLoadImageEvent, NULL, FullImageName, Pid, ImageBase, ImageSize)
+
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 //
@@ -1018,6 +1036,41 @@ McTemplateK0z(
     return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0z_ARGCOUNT + 1, EventData);
 }
 #endif // McTemplateK0z_def
+
+//
+//Template from manifest : MilouLogLoadImage
+//
+#ifndef McTemplateK0zxii_def
+#define McTemplateK0zxii_def
+ETW_INLINE
+ULONG
+McTemplateK0zxii(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_opt_ const GUID* Activity,
+    _In_opt_ PCWSTR  _Arg0,
+    _In_ const unsigned __int64  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_ const signed __int64  _Arg3
+    )
+{
+#define McTemplateK0zxii_ARGCOUNT 4
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0zxii_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],
+                        (_Arg0 != NULL) ? _Arg0 : L"NULL",
+                        (_Arg0 != NULL) ? (ULONG)((wcslen(_Arg0) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const signed __int64)  );
+
+    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0zxii_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateK0zxii_def
 
 //
 //Template from manifest : MilouLogRegPreDeleteKey
@@ -1351,6 +1404,7 @@ McTemplateK0zzzxxx(
 #define MSG_Milou_Driver_task_Registry_message 0x70000001L
 #define MSG_Milou_Driver_task_Process_message 0x70000002L
 #define MSG_Milou_Driver_task_Thread_message 0x70000003L
+#define MSG_Milou_Driver_task_LoadImageTask_message 0x70000004L
 #define MSG_Milou_Driver_channel_Milou_message 0x90000001L
 #define MSG_Milou_Driver_event_31338_message 0xB0007A6AL
 #define MSG_Milou_Driver_event_31339_message 0xB0007A6BL
@@ -1362,4 +1416,5 @@ McTemplateK0zzzxxx(
 #define MSG_Milou_Driver_event_31345_message 0xB0007A71L
 #define MSG_Milou_Driver_event_31346_message 0xB0007A72L
 #define MSG_Milou_Driver_event_31347_message 0xB0007A73L
+#define MSG_Milou_Driver_event_31348_message 0xB0007A74L
 #define MSG_MilouEvent_EventMessage          0xB0017A69L

@@ -7,6 +7,7 @@
 BOOLEAN g_IsRegistryCallbackActive;
 BOOLEAN g_IsProcessCallbackActive;
 BOOLEAN g_IsThreadCallbackActive;
+BOOLEAN g_IsLoadImageCallbackActive;
 
 // Driver callbacks
 EX_CALLBACK_FUNCTION    MilouRegistryCallback;
@@ -39,7 +40,7 @@ MilouRegNtPreDeleteKey(
         if (NULL == pwKeyName) {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to allocate memory\n");
+                       MILOU_LOG_P __FUNCTION__ " Failed to allocate memory\n");
 
             retStatus = FALSE;
         } else {
@@ -59,7 +60,7 @@ MilouRegNtPreDeleteKey(
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed obtaining key name\n");
+                   MILOU_LOG_P __FUNCTION__ " Failed obtaining key name\n");
 
         retStatus = FALSE;
     }
@@ -99,7 +100,7 @@ MilouRegNtPreSetValueKey(
         if (NULL == pwKeyName) {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to allocate memory\n");
+                       MILOU_LOG_P __FUNCTION__ " Failed to allocate memory\n");
 
             retStatus = FALSE;
         } else {
@@ -109,7 +110,7 @@ MilouRegNtPreSetValueKey(
             if (NULL == pwValueName) {
                 DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                            DPFLTR_ERROR_LEVEL,
-                           MILOU_LOG_P __FUNCTION__ "Failed to allocate memory(2)\n");
+                           MILOU_LOG_P __FUNCTION__ " Failed to allocate memory(2)\n");
             } else {
                 RtlSecureZeroMemory(pwKeyName, ObjectName->Length + sizeof(WCHAR));
                 RtlCopyMemory(pwKeyName, ObjectName->Buffer, ObjectName->Length);
@@ -216,7 +217,7 @@ MilouRegNtPreSetValueKey(
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed obtaining key name\n");
+                   MILOU_LOG_P __FUNCTION__ " Failed obtaining key name\n");
 
         retStatus = FALSE;
     }
@@ -254,7 +255,7 @@ MilouRegNtPreDeleteValueKey(
         if (NULL == pwKeyName) {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to allocate memory\n");
+                       MILOU_LOG_P __FUNCTION__ " Failed to allocate memory\n");
 
             retStatus = FALSE;
         } else {
@@ -295,7 +296,7 @@ MilouRegNtPreDeleteValueKey(
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed obtaining key name\n");
+                   MILOU_LOG_P __FUNCTION__ " Failed obtaining key name\n");
 
         retStatus = FALSE;
     }
@@ -333,7 +334,7 @@ MilouRegNtPreSetInformationKey(
         if (NULL == pwKeyName) {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to allocate memory\n");
+                       MILOU_LOG_P __FUNCTION__ " Failed to allocate memory\n");
 
             retStatus = FALSE;
         } else {
@@ -391,7 +392,7 @@ MilouRegNtPreSetInformationKey(
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed obtaining key name\n");
+                   MILOU_LOG_P __FUNCTION__ " Failed obtaining key name\n");
 
         retStatus = FALSE;
     }
@@ -430,7 +431,7 @@ MilouRegNtPreRenameKey(
         if (NULL == pwKeyName) {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to allocate memory\n");
+                       MILOU_LOG_P __FUNCTION__ " Failed to allocate memory\n");
 
             retStatus = FALSE;
         } else {
@@ -490,7 +491,7 @@ MilouRegNtPreRenameKey(
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed obtaining key name\n");
+                   MILOU_LOG_P __FUNCTION__ " Failed obtaining key name\n");
 
         retStatus = FALSE;
     }
@@ -603,7 +604,7 @@ MilouRegNtPreCreateKeyEx(
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed obtaining key name\n");
+                   MILOU_LOG_P __FUNCTION__ " Failed obtaining key name\n");
     }
 
     if (!g_IsWindows8OrGreater && (ExGetPreviousMode() == UserMode)) {
@@ -735,7 +736,7 @@ RegisterRegistryCallback(
     if (NULL == pMilouCallbackContext) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed to create callback context\n");
+                   MILOU_LOG_P __FUNCTION__ " Failed to create callback context\n");
 
         return FALSE;
     }
@@ -750,13 +751,13 @@ RegisterRegistryCallback(
         if (!InsertCallbackContext(pMilouCallbackContext)) {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to insert callback context\n");
+                       MILOU_LOG_P __FUNCTION__ " Failed to insert callback context\n");
 
             ntStatus = CmUnRegisterCallback(pMilouCallbackContext->Cookie);
             if (!NT_SUCCESS(ntStatus)) {
                 DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                            DPFLTR_ERROR_LEVEL,
-                           MILOU_LOG_P __FUNCTION__ "Failed to unregister callback: %#X\n",
+                           MILOU_LOG_P __FUNCTION__ " Failed to unregister callback: %#X\n",
                            ntStatus);
             }
              
@@ -769,7 +770,7 @@ RegisterRegistryCallback(
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed to register callback: %#X\n",
+                   MILOU_LOG_P __FUNCTION__ " Failed to register callback: %#X\n",
                    ntStatus);
 
     cleanup:
@@ -799,7 +800,7 @@ UnregisterRegistryCallback(
     if (!g_IsRegistryCallbackActive) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Registry callback is not active. Nothing to unregister\n");
+                   MILOU_LOG_P __FUNCTION__ " Registry callback is not active. Nothing to unregister\n");
 
         return retStatus;
     }
@@ -813,7 +814,7 @@ UnregisterRegistryCallback(
         if (!NT_SUCCESS(ntStatus)) {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to unregister callback: %#X\n",
+                       MILOU_LOG_P __FUNCTION__ " Failed to unregister callback: %#X\n",
                        ntStatus);
 
             retStatus = FALSE;
@@ -822,7 +823,7 @@ UnregisterRegistryCallback(
         } else {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_INFO_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Register callback unregistered\n");
+                       MILOU_LOG_P __FUNCTION__ " Register callback unregistered\n");
 
             g_IsRegistryCallbackActive = FALSE;
 
@@ -833,18 +834,18 @@ UnregisterRegistryCallback(
 
                 DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                            DPFLTR_INFO_LEVEL,
-                           MILOU_LOG_P __FUNCTION__ "Callback context deleted\n");
+                           MILOU_LOG_P __FUNCTION__ " Callback context deleted\n");
             } else {
                 DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                            DPFLTR_ERROR_LEVEL,
-                           MILOU_LOG_P __FUNCTION__ "Failed to find and delete context\n");
+                           MILOU_LOG_P __FUNCTION__ " Failed to find and delete context\n");
             }
         }         
 
         if (IsListEmpty(&g_CallbackCtxListHead)) {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_INFO_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Empty list.\n");
+                       MILOU_LOG_P __FUNCTION__ " Empty list.\n");
 
             break;
         }
@@ -892,7 +893,7 @@ MilouProcessCallback(
         } else {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to allocate memory\n");
+                       MILOU_LOG_P __FUNCTION__ " Failed to allocate memory\n");
         }
     }
     if (CreateInfo->CommandLine != NULL) {
@@ -905,7 +906,7 @@ MilouProcessCallback(
         } else {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to allocate memory\n");
+                       MILOU_LOG_P __FUNCTION__ " Failed to allocate memory\n");
         }
     }
 
@@ -941,12 +942,12 @@ RegisterProcessCallback(
         if (!Remove) {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to register process callback: %#X\n",
+                       MILOU_LOG_P __FUNCTION__ " Failed to register process callback: %#X\n",
                        ntStatus);
         } else {
             DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                        DPFLTR_ERROR_LEVEL,
-                       MILOU_LOG_P __FUNCTION__ "Failed to unregister process callback: %#X\n",
+                       MILOU_LOG_P __FUNCTION__ " Failed to unregister process callback: %#X\n",
                        ntStatus);
         }
 
@@ -971,7 +972,7 @@ UnregisterProcessCallback(
     if (!g_IsProcessCallbackActive) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Process callback is not active. Nothing to unregister\n");
+                   MILOU_LOG_P __FUNCTION__ " Process callback is not active. Nothing to unregister\n");
 
         return TRUE;
     }
@@ -1007,7 +1008,7 @@ RegisterThreadCallback(
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed to register thread callback: %#X\n",
+                   MILOU_LOG_P __FUNCTION__ " Failed to register thread callback: %#X\n",
                    ntStatus);
 
         return FALSE;
@@ -1023,7 +1024,7 @@ UnregisterThreadCallback(
     if (!g_IsThreadCallbackActive) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Thread callback is not active. Nothing to unregister\n");
+                   MILOU_LOG_P __FUNCTION__ " Thread callback is not active. Nothing to unregister\n");
 
         return TRUE;
     }
@@ -1036,7 +1037,113 @@ UnregisterThreadCallback(
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Failed to unregister thread callback: %#X\n",
+                   MILOU_LOG_P __FUNCTION__ " Failed to unregister thread callback: %#X\n",
+                   ntStatus);
+
+        return FALSE;
+    }
+}
+
+//
+// At this moment only system images(ex: drivers) are logged, logging user space loaded images
+// creates a lot of redundant messages, but should be considered for later as an optional feature
+// Also, keep in mind about the posibility of receiving an extended ImageInfo with a pointer to
+// a _FILE_OBJECT
+//
+VOID
+MilouLoadImageCallback(
+    PUNICODE_STRING FullImageName,
+    HANDLE          ProcessId,
+    PIMAGE_INFO     ImageInfo
+)
+{
+    PWSTR   pFullImageName = NULL;
+
+    PAGED_CODE();
+
+    //
+    // From docs, when ProcessId is 0 a kernel image is loaded
+    // We'll check SystemModeImage member just to sleep better
+    //
+    if ((ProcessId == 0) && ImageInfo->SystemModeImage) {
+        //
+        // From docs, FullImageName can be NULL when the OS is unable to obtain the ful name
+        //
+        if (FullImageName != NULL) {
+            pFullImageName = (PWSTR)ExAllocatePoolWithTag(PagedPool, FullImageName->Length + sizeof(WCHAR), MILOU_IMG_CB_TAG);
+            if (pFullImageName != NULL) {
+                RtlSecureZeroMemory(pFullImageName, FullImageName->Length + sizeof(WCHAR));
+                RtlCopyMemory(pFullImageName, FullImageName->Buffer, FullImageName->Length);
+
+                EventWriteMilouLoadImageEvent(NULL,
+                                              pFullImageName,
+                                              (SIZE_T)ProcessId, // in this case it will 0, but keep it for user mode...
+                                              (SIZE_T)ImageInfo->ImageBase,
+                                              ImageInfo->ImageSize);
+
+                ExFreePoolWithTag(pFullImageName, MILOU_IMG_CB_TAG);
+                pFullImageName = NULL;
+            } else {
+                EventWriteMilouLoadImageEvent(NULL,
+                                              L"Failed to allocate memory", // we'll not have the name, but still we'll know something loaded
+                                              (SIZE_T)ProcessId,
+                                              (SIZE_T)ImageInfo->ImageBase,
+                                              ImageInfo->ImageSize);
+            }
+        } else {
+            EventWriteMilouLoadImageEvent(NULL,
+                                          L"Full image name not available",
+                                          (SIZE_T)ProcessId,
+                                          (SIZE_T)ImageInfo->ImageBase,
+                                          ImageInfo->ImageSize);
+        }
+    }
+}
+
+_Use_decl_annotations_
+BOOLEAN
+RegisterLoadImageCallback(
+    VOID
+)
+{
+    NTSTATUS ntStatus = PsSetLoadImageNotifyRoutine((PLOAD_IMAGE_NOTIFY_ROUTINE)MilouLoadImageCallback);
+    if (NT_SUCCESS(ntStatus)) {
+        g_IsLoadImageCallbackActive = TRUE;
+
+        return TRUE;
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   MILOU_LOG_P __FUNCTION__ " Failed to register load image callback: %#X\n",
+                   ntStatus);
+
+        return FALSE;
+    }
+}
+
+_Use_decl_annotations_
+BOOLEAN
+UnregisterLoadImageCallback(
+    VOID
+)
+{
+    if (!g_IsLoadImageCallbackActive) {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_INFO_LEVEL,
+                   MILOU_LOG_P __FUNCTION__ " Load image callback is not active. Nothing to unregister\n");
+
+        return TRUE;
+    }
+
+    NTSTATUS ntStatus = PsRemoveLoadImageNotifyRoutine((PLOAD_IMAGE_NOTIFY_ROUTINE)MilouLoadImageCallback);
+    if (NT_SUCCESS(ntStatus)) {
+        g_IsLoadImageCallbackActive = FALSE;
+
+        return TRUE;
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   MILOU_LOG_P __FUNCTION__ " Failed to unregister load image callback: %#X\n",
                    ntStatus);
 
         return FALSE;

@@ -19,12 +19,14 @@
 					<event symbol="MilouProcCreateEvent" value="31345" version="0" channel="Milou" level="win:Informational" task="ProcessTask" opcode="win:Info" template="MilouLogProcCreate" message="$(string.Milou Driver.event.31345.message)"></event>
 					<event symbol="MilouProcExitEvent" value="31346" version="0" channel="Milou" level="win:Informational" task="ProcessTask" opcode="win:Info" template="MilouLogProcExit" message="$(string.Milou Driver.event.31346.message)"></event>
 					<event symbol="MilouThreadEvent" value="31347" version="0" channel="Milou" level="win:Informational" task="ThreadTask" opcode="win:Info" template="MilouLogThread" message="$(string.Milou Driver.event.31347.message)"></event>
+					<event symbol="MilouLoadImageEvent" value="31348" version="0" channel="Milou" level="win:Informational" task="LoadImageTask" opcode="win:Info" template="MilouLogLoadImage" message="$(string.Milou Driver.event.31348.message)"></event>
 				</events>
 				<levels></levels>
 				<tasks>
 					<task name="RegistryTask" symbol="RegistryTask" value="1" eventGUID="{E53E31F3-3390-4FC5-95B7-B169ECD50E01}" message="$(string.Milou Driver.task.Registry.message)"></task>
 					<task name="ProcessTask" symbol="ProcessTask" value="2" eventGUID="{B0A62E22-918C-47CA-8ECD-BCCBA6A4EBEE}" message="$(string.Milou Driver.task.Process.message)"></task>
 					<task name="ThreadTask" symbol="ThreadTask" value="3" eventGUID="{3CA8ED4B-B230-4303-97FF-DC45D2B991C1}" message="$(string.Milou Driver.task.Thread.message)"></task>
+					<task name="LoadImageTask" symbol="LoadImageTask" value="4" eventGUID="{61DC0880-042A-4D1B-8C7B-9ECEA6449B2C}" message="$(string.Milou Driver.task.LoadImageTask.message)"></task>
 				</tasks>
 				<opcodes></opcodes>
 				<channels>
@@ -125,6 +127,12 @@
 						<data name="Tid" inType="win:UInt64" outType="xs:unsignedLong"></data>
 						<data name="Created" inType="win:Boolean" outType="xs:boolean"></data>
 					</template>
+					<template tid="MilouLogLoadImage">
+						<data name="FullImageName" inType="win:UnicodeString" outType="xs:string"></data>
+						<data name="Pid" inType="win:UInt64" outType="xs:unsignedLong"></data>
+						<data name="ImageBase" inType="win:HexInt64" outType="win:HexInt64"></data>
+						<data name="ImageSize" inType="win:HexInt64" outType="win:HexInt64"></data>
+					</template>
 				</templates>
 			</provider>
 		</events>
@@ -138,9 +146,11 @@
 				<string id="channel.System" value="System"></string>
 				<string id="channel.Application" value="Application"></string>
 				<string id="MilouEvent.EventMessage" value="Milou Message"></string>
-				<string id="Milou Driver.task.Thread.message" value="Milou Thread Task"></string>
-				<string id="Milou Driver.task.Registry.message" value="Milou Registry Task"></string>
-				<string id="Milou Driver.task.Process.message" value="Milou Process Task"></string>
+				<string id="Milou Driver.task.Thread.message" value="Thread"></string>
+				<string id="Milou Driver.task.Registry.message" value="Registry"></string>
+				<string id="Milou Driver.task.Process.message" value="Process"></string>
+				<string id="Milou Driver.task.LoadImageTask.message" value="Load Image"></string>
+				<string id="Milou Driver.event.31348.message" value="Milou Load Image Callback"></string>
 				<string id="Milou Driver.event.31347.message" value="Milou Thread Callback Create/Delete"></string>
 				<string id="Milou Driver.event.31346.message" value="Milou Process Callback Exit"></string>
 				<string id="Milou Driver.event.31345.message" value="Milou Process Callback Create Event"></string>

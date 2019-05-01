@@ -26,31 +26,41 @@ RegisterCallbacks(
     if (RegisterRegistryCallback(DeviceObject, L"Tintin")) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Registry callback enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Registry callback enabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Registry callback not enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Registry callback not enabled!\n");
     }
 
     if (RegisterProcessCallback(FALSE)) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Process creation/exit callback enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Process creation/exit callback enabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Process creation/exit callback not enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Process creation/exit callback not enabled!\n");
     }
 
     if (RegisterThreadCallback()) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Thread creation/exit callback enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Thread creation/exit callback enabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Thread creation/exit callback not enabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Thread creation/exit callback not enabled!\n");
+    }
+
+    if (RegisterLoadImageCallback()) {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_INFO_LEVEL,
+                   MILOU_LOG_P __FUNCTION__ " Load image callback enabled!\n");
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   MILOU_LOG_P __FUNCTION__ " Load image callback not enabled!\n");
     }
 
     return TRUE;
@@ -63,31 +73,41 @@ UnregisterCallbacks(VOID)
     if (UnregisterRegistryCallback()) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Registry callback disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Registry callback disabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Registry callback not disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Registry callback not disabled!\n");
     }
 
     if (UnregisterProcessCallback()) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Process creation/exit callback disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Process creation/exit callback disabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Process creation/exit callback not disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Process creation/exit callback not disabled!\n");
     }
 
     if (UnregisterThreadCallback()) {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_INFO_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Thread creation/exit callback disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Thread creation/exit callback disabled!\n");
     } else {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID,
                    DPFLTR_ERROR_LEVEL,
-                   MILOU_LOG_P __FUNCTION__ "Thread creation/exit callback not disabled!\n");
+                   MILOU_LOG_P __FUNCTION__ " Thread creation/exit callback not disabled!\n");
+    }
+
+    if (UnregisterLoadImageCallback()) {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_INFO_LEVEL,
+                   MILOU_LOG_P __FUNCTION__ " Load image callback disabled!\n");
+    } else {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID,
+                   DPFLTR_ERROR_LEVEL,
+                   MILOU_LOG_P __FUNCTION__ " Load image callback not disabled!\n");
     }
 
     return TRUE;
