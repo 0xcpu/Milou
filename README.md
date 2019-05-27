@@ -10,7 +10,7 @@ Consider this as "Intentionally left blank".
 
 ## Usage
 
-All file should be kept in `C:\Milou`. If you want to change the path, edit the `ETW` manifest, too.
+All files(loader, driver, manifest) should be kept in `C:\Milou`. If you want to change the path, edit the `ETW` manifest, too.
 `Milou` uses `ETW` to log events it subscribes to. Before installing the driver, install the `ETW` manifest:
 
 ```
