@@ -1,34 +1,42 @@
-# Milou - driver suite for malware analysis
+# Milou
 
-Milou is a driver suite that combines multiple drivers in order to help during the malware analysis
-process.
+Milou is a toy driver, initially planned to be used for malware analysis and complement `Sysmon`.
+Now, it's not planned for everything, it's just for fun!
 
 ## Contributing
 
-Here should be a short intro on how to build the solution and coding guidelines
+Consider this as "Intentionally left blank".
 
 ## Usage
 
-How to install the ETW, load drivers, unload, view in Event viewer...
+`Milou` uses `ETW` to log events it subscribes to. Before installing `Milou` driver install the `ETW` manifest:
 
-For now:
 ```
 wevtutil im MilouEtw.xml
+```
+
+To install the driver:
+```
 Miloard.exe load Milou.sys
+```
+
+To uninstall the driver:
+```
 Miloard unload
+```
+
+To uninstall the manifest:
+```
 wevtutil um MilouEtw.xml
 ```
 
-View the log under `Applications and Services Logs` after enabling `Show Analytic and Debug Logs`.
-Should add a picture here..
+View the log under `Applications and Services Logs` after enabling `Show Analytic and Debug Logs`(Adjust log size if you're going to
+let the driver run for a longer period than ~30 seconds as it generates many log messages).
 
-## Feedback
-
-List of emails, twitter handles and how to get in touch...
 
 ## References
 
-Links to projects that were helpful, books
+[Windows driver samples](https://github.com/microsoft/Windows-driver-samples)
 
 ## License
 
