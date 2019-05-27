@@ -1,7 +1,8 @@
 # Milou
 
 Milou is a toy driver, initially planned to be used for malware analysis and complement `Sysmon`.
-Now, it's not planned for everything, it's just for fun!
+
+Now, nothing is planned, it's just for fun! (probably useless).
 
 ## Contributing
 
@@ -9,7 +10,8 @@ Consider this as "Intentionally left blank".
 
 ## Usage
 
-`Milou` uses `ETW` to log events it subscribes to. Before installing `Milou` driver install the `ETW` manifest:
+All file should be kept in `C:\Milou`. If you want to change the path, edit the `ETW` manifest, too.
+`Milou` uses `ETW` to log events it subscribes to. Before installing the driver, install the `ETW` manifest:
 
 ```
 wevtutil im MilouEtw.xml
@@ -30,8 +32,7 @@ To uninstall the manifest:
 wevtutil um MilouEtw.xml
 ```
 
-View the log under `Applications and Services Logs` after enabling `Show Analytic and Debug Logs`(Adjust log size if you're going to
-let the driver run for a longer period than ~30 seconds as it generates many log messages).
+View the log under `Applications and Services Logs` after enabling `Show Analytic and Debug Logs`(Adjust log size if you're going to let the driver run for a longer period than ~30 seconds as it generates many log messages).
 
 
 ## References
@@ -40,6 +41,6 @@ let the driver run for a longer period than ~30 seconds as it generates many log
 
 ## License
 
-Copyright (c) Milou Project. All rights reserved.
+Copyright (c) Milou. All rights reserved.
 
 Licensed under the [GPL v3](https://github.com/0xcpu/Milou/blob/master/LICENSE) License.
